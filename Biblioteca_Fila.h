@@ -98,24 +98,26 @@ task* RetiraFila (Fila* f)
 
 void imprimeData(date d)
 {
-    printf("\n%d ",d.day);
-    printf("\n%d ",d.month);
-    printf("\n%d ",d.year);
+    printf("0%d",d.day);
+    printf("/0%d",d.month);
+    printf("/%d",d.year);
 }
 
 void imprimeFila (Fila* f)
 {
     No* q;
-    printf("\n\t\t");
     for (q=f->ini; q!=NULL; q=q->prox)
     {
-        printf("%d - ",q->info->code);
-        printf("\n%s - ",q->info->name);
-        printf("\n%s - ",q->info->project);
+
+        printf("\n\n===================Tarefa:%d===================\n",q->info->code);
+        printf("\nNome da tarefa: %s ",q->info->name);
+        printf("\nNome do projeto: %s ",q->info->project);
+        printf("\nData de inicio: ");
         imprimeData(q->info->start);
+        printf("\nData de termino: ");
         imprimeData(q->info->finish);
         //printf("\n%s - ",q->info->status);
-        printf("\n\n");
+        printf("\n\n===============================================");
     }
     printf("\n\n");
 }
