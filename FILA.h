@@ -46,7 +46,6 @@ int VaziaFila (Fila* f)
 {
     if (f->ini==NULL) return 1;
     return 0;
-
 }
 
 
@@ -133,7 +132,6 @@ Fila* liberaFila (Fila* f)
         q = t;
     }
     free(f);
-    return NULL;
 }
 
 #endif // FILA_H_INCLUDED
