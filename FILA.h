@@ -1,15 +1,15 @@
 #ifndef FILA_H_INCLUDED
 #define FILA_H_INCLUDED
 
-/* FUNÇÕES DE MANIPULAÇÃO DE PFILA
+/* FUNCOES DE MANIPULACAO DE FILA
 
 Fila* CriaFila()  CRIA A FILA
 
-int VaziaFila (Fila* f) VERIFICA SE A FILA ESTÁ VAIZA
+int VaziaFila (Fila* f) VERIFICA SE A FILA ESTA VAIZA
 
-void InsereFila (Fila* f, int v) INSERÇÃO
+void InsereFila (Fila* f, int v) INSERCAO
 
-int RetiraFila (Fila* f) REMOÇÃO
+int RetiraFila (Fila* f) REMOVE - O
 
 Fila* liberaFila (Fila* f) LIBERA A FILA
 
@@ -62,7 +62,7 @@ No* ins_fim (No* fim, task *A)
     No* p = (No*) malloc(sizeof(No));
     p->info = A;
     p->prox = NULL;
-    if (fim != NULL) /* verifica se lista não estava vazia */
+    if (fim != NULL) /* verifica se lista nï¿½o estava vazia */
     fim->prox = p;
     return p;
 }

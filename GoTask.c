@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <unistd.h>
 #include "FILA.h"
 
 
@@ -18,7 +19,7 @@ int main ()
     while (Choose != 6)
     {       system("cls");
             printf ("==============================================================");
-            printf ("\n\n Bem vindo ao GoTask!!\n\n");
+            printf ("\n\n                    Bem vindo ao GoTask!!\n\n");
             printf ("==============================================================\n\n");
             printf (" 1 - Incluir Tarefas \n\n 2 - Imprimir fila \n\n 3 - Atualizar tarefa \n\n 4 - NA \n\n 5 - NA \n\n 6 - Sair do sistema \n\n Escolha a opcao:");
             scanf ("%d", &Choose);
@@ -81,9 +82,9 @@ void readTask(Fila *p){
     printf("Digite o codigo da tarefa:");
     scanf("%d", &(t->code));
     printf("\n\nDigite o nome da tarefa:");
-    scanf("%s", &(t->name));
+    scanf("%s", (t->name));
     printf("\n\nDigite o nome do projeto:");
-    scanf("%s", &(t->project));
+    scanf("%s", (t->project));
     printf("\n\nDigite a data de inicio:");
     t->start = getdate();
     printf("\n\nDigite a data de termino:");
@@ -141,13 +142,13 @@ void updateTask (Fila *p)
             case 2:
 
                 printf("\n\nDigite o novo nome da tarefa:");
-                scanf("%s", &(aux1->name));
+                scanf("%s", (aux1->name));
             break;
 
             case 3:
 
                 printf("\n\nDigite o novo nome do projeto:");
-                scanf("%s", &(aux1->project));
+                scanf("%s", (aux1->project));
 
             break;
 
