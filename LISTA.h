@@ -29,19 +29,20 @@ int VaziaLista (No *lista)
     return 0;
 }
 
-No *InsereLista (No *lista, No *x)
+No *InsereLista (No *lista, task *x)
 {
     No *novo;
-    novo = x;
+    novo = (No*) malloc(sizeof(No));
+    novo->info = x;
     novo->prox = lista;
     return novo;
 }
 
-No *RemoveInfo (No *lista, No* x)
+No *RemoveInfo (No *lista, int x)
 {
     No *ant = NULL;
     No *p = lista;
-    while (p != NULL && p->info != x)
+    while (p != NULL && p->info->code != x)
     {
         ant = p;
         p = p->prox;
@@ -69,6 +70,7 @@ void imprimeLista (No* lista)
     No *p = lista;
     while (p != NULL)
     {
+        printf("\n\n\n");
         printf("%d\n", p->info->code);
         p = p->prox;
     }
@@ -84,6 +86,7 @@ No *liberaLista (No* lista)
         p = t;
     }
     free (lista);
+    return NULL;
 }
 
 #endif // LISTA_H_INCLUDED

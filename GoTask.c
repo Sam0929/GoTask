@@ -9,7 +9,7 @@
 date getdate();
 void readTask(Fila *p);
 void updateTask(Fila *p);
-void finishTask(Fila *p, No *t);
+Fila *finishTask(Fila *p, No **t);
 
 int main ()
 
@@ -24,7 +24,7 @@ int main ()
             printf ("==============================================================");
             printf ("\n\n                    Bem vindo ao GoTask!!\n\n");
             printf ("==============================================================\n\n");
-            printf (" 1 - Incluir Tarefas \n\n 2 - Imprimir fila \n\n 3 - Atualizar tarefa \n\n 4 - Concluir Tarefa \n\n 5 - NA \n\n 6 - Sair do sistema \n\n Escolha a opcao:");
+            printf (" 1 - Incluir Tarefas \n\n 2 - Imprimir fila \n\n 3 - Atualizar tarefa \n\n 4 - Concluir Tarefa \n\n 5 - TESTE - IMPRIMIR LISTA \n\n 6 - Sair do sistema \n\n Escolha a opcao:");
             scanf ("%d", &Choose);
 
         switch (Choose)
@@ -53,12 +53,14 @@ int main ()
 
             case 4:
 
-                 finishTask(tarefas_criadas, tarefas_concluidas);
+                 tarefas_criadas = finishTask(tarefas_criadas, &tarefas_concluidas);
 
             break;
 
             case 5:
 
+                imprimeLista(tarefas_concluidas);
+                system ("pause");
             break;
         }
     }
@@ -67,8 +69,8 @@ int main ()
     printf("\t\tObrigado por utilizar nosso sistema!! \n\n\t\t\tAte a proxima!");
     printf ("\n\n==============================================================");
 
-    liberaFila(tarefas_criadas);
-    liberaLista(tarefas_concluidas);
+    tarefas_criadas = liberaFila(tarefas_criadas);
+    tarefas_concluidas = liberaLista(tarefas_concluidas);
 
     return 0;
 }
@@ -184,12 +186,13 @@ void updateTask (Fila *p)
 }
 
 
-void  finishTask(Fila *p, No *t)
+Fila *finishTask(Fila *p, No **t)
     {
         system("cls");
         imprimeFila(p);
-        No *aux;
+        task *aux;
         Fila *aux1 = p;
+        Fila *aux2 = CriaFila();
 
         int code;
         printf("==============================================================\n\n");
@@ -199,45 +202,15 @@ void  finishTask(Fila *p, No *t)
         while (!VaziaFila(aux1))
         {
             aux = RetiraFila(aux1);
-            if(aux->info->code == code)
+            if(aux->code == code)
             {
-                t = InsereLista(t, aux);
-                imprimeLista(t);
-                system("pause");                                                //Erros
+                *t = InsereLista(*t, aux);
+                imprimeLista(*t);
+                system("pause");                                                
             }else{
-                InsereFila(aux1, aux->info);
+                InsereFila(aux2, aux);
             }
 
         }
-        /*while (aux1->ini!= NULL)
-        {
-            aux->info = RetiraFila(aux1);
-            if(aux->info->code == code)
-            {
-                t = InsereLista(t, aux);
-                imprimeLista(t);
-                system("pause");
-            }else
-            {
-                InsereFila(aux1, aux->info);
-            }
-            aux1->ini = aux1->ini->prox;
-
-        }*/
-
-
-        /*if(aux == NULL)
-        {
-            printf("\nImpossivel localizar a tarefa, por favor, tente novamente!\n\n");
-            system("pause");
-        }
-        else
-        {
-            t = InsereLista(t, aux);
-            imprimeLista(t);
-            system("pause");
-        }*/
-
-
-
+        return aux2;
     }

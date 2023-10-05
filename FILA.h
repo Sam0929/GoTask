@@ -132,6 +132,7 @@ Fila* liberaFila (Fila* f)
         q = t;
     }
     free(f);
+    return NULL;
 }
 
 #endif // FILA_H_INCLUDED
