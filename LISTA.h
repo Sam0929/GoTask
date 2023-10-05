@@ -18,40 +18,29 @@ no *liberaLista (no* lista) LIBERA A LISTA
 
 */
 
-typedef struct no {
-
-    int info;
-    struct no *prox;
-}no;
-
-no *CriaLista()
+No *CriaLista()
 {
-        no *lista;
-        lista = (no*) malloc(sizeof(no));
-        if (lista != NULL)
-            lista->prox = NULL;
-        return lista;
+    return NULL;
 }
 
-int VaziaLista (no *lista)
+int VaziaLista (No *lista)
 {
     if (lista == NULL) return 1;
     return 0;
 }
 
-no *InsereLista (no *lista, int x)
+No *InsereLista (No *lista, No *x)
 {
-    no *novo;
-    novo = (no*) malloc(sizeof(no));
-    novo->info = x;
+    No *novo;
+    novo = x;
     novo->prox = lista;
     return novo;
 }
 
-no *RemoveInfo (no *lista, int x)
+No *RemoveInfo (No *lista, No* x)
 {
-    no *ant = NULL;
-    no *p = lista;
+    No *ant = NULL;
+    No *p = lista;
     while (p != NULL && p->info != x)
     {
         ant = p;
@@ -74,49 +63,27 @@ no *RemoveInfo (no *lista, int x)
     return lista;
 }
 
-void imprimeLista (no* lista)
+void imprimeLista (No* lista)
 {
 
-    no *p = lista;
+    No *p = lista;
     while (p != NULL)
     {
-        printf("%d\n", p->info);
+        printf("%d\n", p->info->code);
         p = p->prox;
     }
 }
 
-no *liberaLista (no* lista)
+No *liberaLista (No* lista)
 {
-    no *p = lista;
+    No *p = lista;
     while (p != NULL)
     {
-        no *t = p->prox;
+        No *t = p->prox;
         free(p);
         p = t;
     }
     free (lista);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #endif // LISTA_H_INCLUDED
