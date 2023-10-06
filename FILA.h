@@ -3,28 +3,30 @@
 
 /* FUNCOES DE MANIPULACAO DE FILA
 
-Fila* CriaFila()  CRIA A FILA
+Fila* createQueue()  CRIA A FILA
 
-int VaziaFila (Fila* f) VERIFICA SE A FILA ESTA VAIZA
+int emptyQueue (Fila* f) VERIFICA SE A FILA ESTA VAIZA
 
-void InsereFila (Fila* f, int v) INSERCAO
+void insertQueue (Fila* f, int v) INSERCAO
 
-int RetiraFila (Fila* f) REMOVE - O
+int removeQueue (Fila* f) REMOVE - O
 
-Fila* liberaFila (Fila* f) LIBERA A FILA
+Fila* freeQueue (Fila* f) LIBERA A FILA
 
-void imprimeFila (Fila* f)IMPRIME A FILA
+void printQueue (Fila* f)IMPRIME A FILA
 */
-typedef struct date{
+typedef struct date
+{
     int day;
     int month;
     int year;
 } date;
 
-typedef struct task {
+typedef struct task
+{
     int code;
     char name[30];
-    char project [30];
+    char project[30];
     date start;
     date finish;
     int status;
@@ -33,105 +35,122 @@ typedef struct task {
 typedef struct nos
 {
     task *info;
-    struct nos *prox;
-}No;
+    struct nos *next;
+} No;
 
 typedef struct fila
 {
-    No * ini;
-    No * fim;
+    No *first;
+    No *last;
 } Fila;
 
-int VaziaFila (Fila* f)
+int emptyQueue(Fila *f)
 {
-    if (f->ini==NULL) return 1;
+    if (f->first == NULL)
+        return 1;
     return 0;
 }
 
-
-Fila* CriaFila ()
+Fila *createQueue()
 {
-    Fila* f = (Fila*) malloc(sizeof(Fila));
-    f->ini = f->fim = NULL;
+    Fila *f = (Fila *)malloc(sizeof(Fila));
+    f->first = f->last = NULL;
     return f;
 }
 
-No* ins_fim (No* fim, task *A)
+No *insertLast(No *last, task *A)
 {
-    No* p = (No*) malloc(sizeof(No));
+    No *p = (No *)malloc(sizeof(No));
     p->info = A;
-    p->prox = NULL;
-    if (fim != NULL) /* verifica se lista n�o estava vazia */
-    fim->prox = p;
+    p->next = NULL;
+    if (last != NULL) /* verifica se lista n�o estava vazia */
+        last->next = p;
     return p;
 }
 
-void InsereFila (Fila* f, task *v)
+void insertQueue(Fila *f, task *v)
 {
-    f->fim = ins_fim(f->fim,v);
-    if (f->ini==NULL) /* fila antes vazia? */
-    f->ini = f->fim;
+    f->last = insertLast(f->last, v);
+    if (f->first == NULL) /* fila antes vazia? */
+        f->first = f->last;
 }
 
-No* retira_ini (No* ini)
+No *removeFirst(No *first)
 {
-    No* p = ini->prox;
-    free(ini);
+    No *p = first->next;
+    free(first);
     return p;
 }
 
-task* RetiraFila (Fila* f)
+task *removeQueue(Fila *f)
 {
-    task* v;
-    if (VaziaFila(f))
+    task *v;
+    if (emptyQueue(f))
     {
         printf("Fila vazia.\n");
         exit(0); /* aborta programa */
     }
-    v = f->ini->info;
-    f->ini = retira_ini(f->ini);
-    if (f->ini == NULL) /* fila ficou vazia? */
-    f->fim = NULL;
+    v = f->first->info;
+    f->first = removeFirst(f->first);
+    if (f->first == NULL) /* fila ficou vazia? */
+        f->last = NULL;
     return v;
 }
 
-void imprimeData(date d)
+void printDate(date d)
 {
-    if (d.day<10) printf("0%d",d.day);
-    else printf("%d",d.day);
+    if (d.day < 10)
+        printf("0%d", d.day);
+    else
+        printf("%d", d.day);
 
-    if (d.month<10) printf("/0%d",d.month);
-    else printf("/%d",d.month);
-    
-    printf("/%d",d.year);
+    if (d.month < 10)
+        printf("/0%d", d.month);
+    else
+        printf("/%d", d.month);
+
+    printf("/%d", d.year);
 }
 
-void imprimeFila (Fila* f)
+void printQueue(Fila *f)
 {
-    No* q;
-    for (q=f->ini; q!=NULL; q=q->prox)
+    No *q;
+    for (q = f->first; q != NULL; q = q->next)
     {
 
-        printf("\n\n===================Tarefa:%d===================\n",q->info->code);
-        printf("\nNome da tarefa: %s ",q->info->name);
-        printf("\nNome do projeto: %s ",q->info->project);
+        printf("\n\n===================Tarefa:%d===================\n", q->info->code);
+
+        printf("\nNome da tarefa: %s ", q->info->name);
+
+        printf("\nNome do projeto: %s ", q->info->project);
+
         printf("\nData de inicio: ");
-        imprimeData(q->info->start);
+        printDate(q->info->start);
+
         printf("\nData de termino: ");
-        imprimeData(q->info->finish);
-        //printf("\n%s - ",q->info->status);
+        printDate(q->info->finish);
+
+        printf("\nStatus:");
+        if(q->info->status == 0){
+            printf(" Em dia");
+        }
+        else if(q->info->status == 1){
+            printf(" Pendente");
+        }
+        else if(q->info->status == -1){
+            printf(" Atrasada");
+        }
         printf("\n\n===============================================");
     }
     printf("\n\n");
 }
 
-
-Fila* liberaFila (Fila* f)
+Fila *freeQueue(Fila *f)
 {
-    No* q = f->ini;
-    while (q!=NULL)
+    No *q = f->first;
+    while (q != NULL)
     {
-        No* t = q->prox;
+        No *t = q->next;
         free(q);
         q = t;
     }
