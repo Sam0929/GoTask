@@ -97,8 +97,12 @@ task* RetiraFila (Fila* f)
 
 void imprimeData(date d)
 {
-    printf("0%d",d.day);
-    printf("/0%d",d.month);
+    if (d.day<10) printf("0%d",d.day);
+    else printf("%d",d.day);
+
+    if (d.month<10) printf("/0%d",d.month);
+    else printf("/%d",d.month);
+    
     printf("/%d",d.year);
 }
 

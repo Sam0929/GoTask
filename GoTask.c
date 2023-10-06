@@ -2,11 +2,12 @@
 #include <stdio.h>
 #include <time.h>
 #include <unistd.h>
+#include <windows.h>
 #include "FILA.h"
 #include "LISTA.h"
 
 
-date getdate();
+date getdate(boolean ini);
 void readTask(Fila *p);
 void updateTask(Fila *p);
 Fila *finishTask(Fila *p, No **t);
@@ -75,10 +76,22 @@ int main ()
     return 0;
 }
 
-date getdate()
-{
+date getdate(boolean ini)
+{   
     date d;
+    if (ini)
+    {
+        SYSTEMTIME t;
+        GetLocalTime(&t);
+        d.day = t.wDay;
+        d.month = t.wMonth;
+        d.year = t.wYear;
+    }
+
+    else{
     scanf("%d %d %d", &d.day, &d.month, &d.year);
+    
+    }
     return d;
 }
 
@@ -93,10 +106,13 @@ void readTask(Fila *p){
     scanf("%s", (t->name));
     printf("\n\nDigite o nome do projeto:");
     scanf("%s", (t->project));
-    printf("\n\nDigite a data de inicio:");
-    t->start = getdate();
-    printf("\n\nDigite a data de termino:");
-    t->finish = getdate();
+    t->start = getdate(1);
+    printf("\n\nDigite a data de termino (dd/mm/aaaa):");
+    do
+    {
+        t->finish = getdate(0);
+    } while(t->finish.day < t->start.day || t->finish.month < t->start.month || t->finish.year < t->start.year 
+    || t->finish.day > 31 || t->finish.month > 12 || t->finish.year > 2100);
 
     InsereFila(p, t);
 
@@ -161,15 +177,14 @@ void updateTask (Fila *p)
 
             case 4:
 
-                printf("\n\nDigite a nova data de inicio da tarefa:");
-                aux1 -> start = getdate();
+                aux1 -> start = getdate(1);
 
             break;
 
             case 5:
 
                 printf("\n\nDigite a nova data de termino da tarefa:");
-                aux1 -> finish = getdate();
+                aux1 -> finish = getdate(0);
 
             break;
 
@@ -193,6 +208,7 @@ Fila *finishTask(Fila *p, No **t)
         task *aux;
         Fila *aux1 = p;
         Fila *aux2 = CriaFila();
+        int flag = 0;
 
         int code;
         printf("==============================================================\n\n");
@@ -205,12 +221,19 @@ Fila *finishTask(Fila *p, No **t)
             if(aux->code == code)
             {
                 *t = InsereLista(*t, aux);
-                imprimeLista(*t);
-                system("pause");                                                
+                aux -> finish = getdate(1);
+                printf ("\n==============================================================");
+                printf("\n\nTarefa concluida com sucesso!");
+                flag ++;
+                                                             
             }else{
                 InsereFila(aux2, aux);
             }
-
         }
+        
+        if (!flag) printf("\n\nTarefa nao encontrada, por favor, tente novamente!\n\n");
+        
+        sleep(2);  
+         
         return aux2;
     }

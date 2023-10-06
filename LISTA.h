@@ -66,12 +66,19 @@ No *RemoveInfo (No *lista, int x)
 
 void imprimeLista (No* lista)
 {
-
+    
     No *p = lista;
     while (p != NULL)
     {
-        printf("\n\n\n");
-        printf("%d\n", p->info->code);
+       printf("\n===================Tarefa:%d===================\n",p->info->code);
+        printf("\nNome da tarefa: %s ",p->info->name);
+        printf("\nNome do projeto: %s ",p->info->project);
+        printf("\nData de inicio: ");
+        imprimeData(p->info->start);
+        printf("\nData de termino: ");
+        imprimeData(p->info->finish);
+        //printf("\n%s - ",q->info->status);
+        printf("\n\n===============================================\n");
         p = p->prox;
     }
 }
