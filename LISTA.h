@@ -1,98 +1,98 @@
 #ifndef LISTA_H_INCLUDED
 #define LISTA_H_INCLUDED
 
-
 /* FUNCOES DE MANIPULACAO DE LISTA
 
-no* CriaLista()  CRIA A LISTA
+no* createList()  CRIA A LISTA
 
-int VaziaLista (no* lista) VERIFICA SE A LISTA ESTA VAIZA
+int emptyList (no* lista) VERIFICA SE A LISTA ESTA VAIZA
 
-no *InsereLista (no* lista, int x) INSERCAO
+no *insertList (no* lista, int x) INSERCAO
 
-no *RemoveInfo (no* lista, int x) REMOVE - O ELEMENTO
+no *removeInfo (no* lista, int x) REMOVE - O ELEMENTO
 
-void imprimeLista (no* lista)IMPRIME A LISTA
+void printList (no* lista)IMPRIME A LISTA
 
-no *liberaLista (no* lista) LIBERA A LISTA
+no *freeList (no* lista) LIBERA A LISTA
 
 */
 
-No *CriaLista()
+No *createList()
 {
     return NULL;
 }
 
-int VaziaLista (No *lista)
+int emptyList(No *lista)
 {
-    if (lista == NULL) return 1;
+    if (lista == NULL)
+        return 1;
     return 0;
 }
 
-No *InsereLista (No *lista, task *x)
+No *insertList(No *lista, task *x)
 {
     No *novo;
-    novo = (No*) malloc(sizeof(No));
+    novo = (No *)malloc(sizeof(No));
     novo->info = x;
-    novo->prox = lista;
+    novo->next = lista;
     return novo;
 }
 
-No *RemoveInfo (No *lista, int x)
+No *removeInfo(No *lista, int x)
 {
     No *ant = NULL;
     No *p = lista;
     while (p != NULL && p->info->code != x)
     {
         ant = p;
-        p = p->prox;
+        p = p->next;
     }
     if (p == NULL)
     {
         return lista;
     }
-        if (ant == NULL)
-        {
-            lista = p->prox;
-        }
-        else
-        {
-            ant->prox = p->prox;
-        }
+    if (ant == NULL)
+    {
+        lista = p->next;
+    }
+    else
+    {
+        ant->next = p->next;
+    }
 
     free(p);
     return lista;
 }
 
-void imprimeLista (No* lista)
+void printList(No *lista)
 {
-    
+
     No *p = lista;
     while (p != NULL)
     {
-       printf("\n===================Tarefa:%d===================\n",p->info->code);
-        printf("\nNome da tarefa: %s ",p->info->name);
-        printf("\nNome do projeto: %s ",p->info->project);
+        printf("\n===================Tarefa:%d===================\n", p->info->code);
+        printf("\nNome da tarefa: %s ", p->info->name);
+        printf("\nNome do projeto: %s ", p->info->project);
         printf("\nData de inicio: ");
-        imprimeData(p->info->start);
+        printDate(p->info->start);
         printf("\nData de termino: ");
-        imprimeData(p->info->finish);
-        //printf("\n%s - ",q->info->status);
+        printDate(p->info->finish);
+        // printf("\n%s - ",q->info->status);
         printf("\n\n===============================================\n");
-        p = p->prox;
+        p = p->next;
     }
 }
 
-No *liberaLista (No* lista)
+No *freeList(No *lista)
 {
     No *p = lista;
     while (p != NULL)
     {
-        No *t = p->prox;
+        No *t = p->next;
         free(p);
         p = t;
     }
-    free (lista);
+    free(lista);
     return NULL;
 }
 

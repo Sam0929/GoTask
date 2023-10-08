@@ -6,78 +6,79 @@
 #include "FILA.h"
 #include "LISTA.h"
 
-
 date getdate(boolean ini);
 void readTask(Fila *p);
 void updateTask(Fila *p);
 Fila *finishTask(Fila *p, No **t);
+void setStatus(task *t);
 
-int main ()
+int main()
 
 {
-    Fila *tarefas_criadas = CriaFila();
-    No *tarefas_concluidas = CriaLista();
+    Fila *tarefas_criadas = createQueue();
+    No *tarefas_concluidas = createList();
 
     int Choose;
 
     while (Choose != 6)
-    {       system("cls");
-            printf ("==============================================================");
-            printf ("\n\n                    Bem vindo ao GoTask!!\n\n");
-            printf ("==============================================================\n\n");
-            printf (" 1 - Incluir Tarefas \n\n 2 - Imprimir fila \n\n 3 - Atualizar tarefa \n\n 4 - Concluir Tarefa \n\n 5 - TESTE - IMPRIMIR LISTA \n\n 6 - Sair do sistema \n\n Escolha a opcao:");
-            scanf ("%d", &Choose);
+    {
+        system("cls");
+        printf("==============================================================");
+        printf("\n\n                    Bem vindo ao GoTask!!\n\n");
+        printf("==============================================================\n\n");
+        printf(" 1 - Incluir Tarefas \n\n 2 - Imprimir fila \n\n 3 - Atualizar tarefa \n\n 4 - Concluir Tarefa \n\n 5 - TESTE - IMPRIMIR LISTA \n\n 6 - Sair do sistema \n\n Escolha a opcao:");
+        scanf("%d", &Choose);
 
         switch (Choose)
         {
-            case 1:
+        case 1:
 
-                system ("cls");
-                readTask(tarefas_criadas);
-
-            break;
-
-            case 2:
-
-                system ("cls");
-                imprimeFila(tarefas_criadas);
-                system ("pause");
+            system("cls");
+            readTask(tarefas_criadas);
 
             break;
 
-            case 3:
+        case 2:
 
-                system ("cls");
-                updateTask(tarefas_criadas);
-
-            break;
-
-            case 4:
-
-                 tarefas_criadas = finishTask(tarefas_criadas, &tarefas_concluidas);
+            system("cls");
+            printQueue(tarefas_criadas);
+            system("pause");
 
             break;
 
-            case 5:
+        case 3:
 
-                imprimeLista(tarefas_concluidas);
-                system ("pause");
+            system("cls");
+            updateTask(tarefas_criadas);
+
+            break;
+
+        case 4:
+
+            tarefas_criadas = finishTask(tarefas_criadas, &tarefas_concluidas);
+
+            break;
+
+        case 5:
+
+            printList(tarefas_concluidas);
+            system("pause");
             break;
         }
     }
     system("cls");
-    printf ("\n\n==============================================================\n\n");
+    printf("\n\n==============================================================\n\n");
     printf("\t\tObrigado por utilizar nosso sistema!! \n\n\t\t\tAte a proxima!");
-    printf ("\n\n==============================================================");
+    printf("\n\n==============================================================");
 
-    tarefas_criadas = liberaFila(tarefas_criadas);
-    tarefas_concluidas = liberaLista(tarefas_concluidas);
+    tarefas_criadas = freeQueue(tarefas_criadas);
+    tarefas_concluidas = freeList(tarefas_concluidas);
 
     return 0;
 }
 
 date getdate(boolean ini)
-{   
+{
     date d;
     if (ini)
     {
@@ -88,52 +89,58 @@ date getdate(boolean ini)
         d.year = t.wYear;
     }
 
-    else{
-    scanf("%d %d %d", &d.day, &d.month, &d.year);
-    
+    else
+    {
+        scanf("%d %d %d", &d.day, &d.month, &d.year);
     }
     return d;
 }
 
-void readTask(Fila *p){
+void readTask(Fila *p)
+{
 
-    task* t = (task*)malloc(sizeof(task));
-
+    task *t = (task *)malloc(sizeof(task));
 
     printf("Digite o codigo da tarefa:");
     scanf("%d", &(t->code));
+    fflush(stdin);
     printf("\n\nDigite o nome da tarefa:");
-    scanf("%s", (t->name));
+    scanf(" %[^\n]", (t->name));
     printf("\n\nDigite o nome do projeto:");
-    scanf("%s", (t->project));
+    scanf(" %[^\n]", (t->project));
     t->start = getdate(1);
-    printf("\n\nDigite a data de termino (dd/mm/aaaa):");
+    printf("\n\nDigite a data de termino (dd mm aaaa):");
     do
     {
         t->finish = getdate(0);
-    } while(t->finish.day < t->start.day || t->finish.month < t->start.month || t->finish.year < t->start.year 
-    || t->finish.day > 31 || t->finish.month > 12 || t->finish.year > 2100);
+    } while (t->finish.day < t->start.day ||
+             t->finish.month < t->start.month || 
+             t->finish.year < t->start.year || 
+             t->finish.day > 31 || 
+             t->finish.month > 12 || 
+             t->finish.year > 2100);
 
-    InsereFila(p, t);
+    insertQueue(p, t);
+    setStatus(t);
 
     printf("\n\nTarefa lida com sucesso!");
     sleep(2);
 }
-void updateTask (Fila *p)
 
+void updateTask(Fila *p)
 {
-    No *aux = p->ini;
+    No *aux = p->first;
     int code;
     printf("==============================================================\n\n");
     printf("Que tarefa deseja modificar?");
-    printf ("\n\n==============================================================\n\n");
+    printf("\n\n==============================================================\n\n");
     scanf("%d", &code);
     while (aux != NULL && aux->info->code != code)
     {
-        aux = aux -> prox;
+        aux = aux->next;
     }
 
-    if(aux == NULL)
+    if (aux == NULL)
     {
         printf("\nImpossivel localizar a tarefa, por favor, tente novamente!\n\n");
         system("pause");
@@ -141,99 +148,123 @@ void updateTask (Fila *p)
 
     else
     {
-        system ("cls");
+        system("cls");
 
         task *aux1 = aux->info;
 
         int Choose;
 
-        printf ("==============================================================");
+        printf("==============================================================");
         printf("\n\nO que voce deseja modificar?");
-        printf ("\n\n==============================================================\n\n");
-        printf (" 1 - Codigo \n\n 2 - Nome da tarefa \n\n 3 - Nome do projeto \n\n 4 - Data de inicio \n\n 5 - Data de termino \n\n 6 - Cancelar \n\n Escolha a opcao:");
+        printf("\n\n==============================================================\n\n");
+        printf(" 1 - Codigo \n\n 2 - Nome da tarefa \n\n 3 - Nome do projeto \n\n 4 - Data de inicio \n\n 5 - Data de termino \n\n 6 - Cancelar \n\n Escolha a opcao:");
         scanf("%d", &Choose);
 
         switch (Choose)
         {
-            case 1:
+        case 1:
 
-                printf("\n\nDigite o novo codigo da tarefa:");
-                scanf("%d", &(aux1->code));
-
-            break;
-
-            case 2:
-
-                printf("\n\nDigite o novo nome da tarefa:");
-                scanf("%s", (aux1->name));
-            break;
-
-            case 3:
-
-                printf("\n\nDigite o novo nome do projeto:");
-                scanf("%s", (aux1->project));
+            printf("\n\nDigite o novo codigo da tarefa:");
+            scanf("%d", &(aux1->code));
 
             break;
 
-            case 4:
+        case 2:
 
-                aux1 -> start = getdate(1);
+            printf("\n\nDigite o novo nome da tarefa:");
+            scanf(" %[^\n]", (aux1->name));
+            break;
+
+        case 3:
+
+            printf("\n\nDigite o novo nome do projeto:");
+            scanf(" %[^\n]", (aux1->project));
 
             break;
 
-            case 5:
+        case 4:
 
-                printf("\n\nDigite a nova data de termino da tarefa:");
-                aux1 -> finish = getdate(0);
+            aux1->start = getdate(1);
 
             break;
 
-            case 6:
+        case 5:
 
-                return;
+            printf("\n\nDigite a nova data de termino da tarefa:");
+            aux1->finish = getdate(0);
+
+            break;
+
+        case 6:
+
+            return;
 
             break;
         }
-        printf ("\n\n==============================================================");
+        printf("\n\n==============================================================");
         printf("\n\nTarefa modificada com sucesso!!");
         sleep(2);
     }
 }
 
-
 Fila *finishTask(Fila *p, No **t)
-    {
-        system("cls");
-        imprimeFila(p);
-        task *aux;
-        Fila *aux1 = p;
-        Fila *aux2 = CriaFila();
-        int flag = 0;
+{
+    system("cls");
+    printQueue(p);
+    task *aux;
+    Fila *aux1 = p;
+    Fila *aux2 = createQueue();
+    int flag = 0;
 
-        int code;
-        printf("==============================================================\n\n");
-        printf("Que tarefa deseja concluir?");
-        printf ("\n\n==============================================================\n\n");
-        scanf("%d", &code);
-        while (!VaziaFila(aux1))
+    int code;
+    printf("==============================================================\n\n");
+    printf("Que tarefa deseja concluir?");
+    printf("\n\n==============================================================\n\n");
+    scanf("%d", &code);
+    while (!emptyQueue(aux1))
+    {
+        aux = removeQueue(aux1);
+        if (aux->code == code)
         {
-            aux = RetiraFila(aux1);
-            if(aux->code == code)
-            {
-                *t = InsereLista(*t, aux);
-                aux -> finish = getdate(1);
-                printf ("\n==============================================================");
-                printf("\n\nTarefa concluida com sucesso!");
-                flag ++;
-                                                             
-            }else{
-                InsereFila(aux2, aux);
-            }
+            *t = insertList(*t, aux);
+            aux->finish = getdate(1);
+            printf("\n==============================================================");
+            printf("\n\nTarefa concluida com sucesso!");
+            flag++;
         }
-        
-        if (!flag) printf("\n\nTarefa nao encontrada, por favor, tente novamente!\n\n");
-        
-        sleep(2);  
-         
-        return aux2;
+        else
+        {
+            insertQueue(aux2, aux);
+        }
     }
+
+    if (!flag)
+        printf("\n\nTarefa nao encontrada, por favor, tente novamente!\n\n");
+
+    sleep(2);
+
+    return aux2;
+}
+
+int
+verifyDate(date d)
+{
+    SYSTEMTIME t;
+    GetLocalTime(&t);
+    if (d.year < t.wYear)
+        return -1;
+    else if (d.year == t.wYear && d.month < t.wMonth)
+        return -1;
+    else if (d.year == t.wYear && d.month == t.wMonth && d.day < t.wDay)
+        return -1;
+    else if (d.year == t.wYear && d.month == t.wMonth && d.day == t.wDay)
+        return 1;
+    else
+        return 0;
+}
+
+void
+setStatus(task *t)
+{
+      t->status = verifyDate(t->finish);  
+}
