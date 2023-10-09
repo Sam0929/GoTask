@@ -185,7 +185,7 @@ printListByStatus(No *lista)
 {
 
     No *p = lista;
-    if (lista != NULL)
+    if (!emptyList(lista))
     {
         printf ("\n\n=======================Lista de Tarefas em dia=======================\n\n");
         while ((p != NULL) && (p->info->status == 0))

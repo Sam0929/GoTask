@@ -314,13 +314,13 @@ Fila
 {
     task *aux;
     int flag = 0;
-    int choise;
+    int choice;
     int code;
     int auxStatus;
 
     printf("==============================================================\n\n");
-    printf("Atualizar uma tarefa da Fila de Tarefas ou da Lista de Tarefas?\n\n  1-Fila   2-Lista\n\nEscolha a opcao:");
-    scanf("%d", &choise);
+    printf("Atualizar uma tarefa da Fila de Tarefas ou da Lista de Tarefas Pendentes?\n\n  1-Fila de Tarefas   2-Lista de Tarefas Pendentes\n\nEscolha a opcao:");
+    scanf("%d", &choice);
     printf("\n\n==============================================================\n\n");
 
     do
@@ -333,12 +333,22 @@ Fila
 
     system("cls");
 
-    if(choise == 1)
-    {
+    if(choice == 1)
+    {   
+        if(emptyQueue(p))
+        {
+            printf("\n\nFila vazia, por favor, tente novamente!\n\n");
+            return p;
+        }
         printQueue(p);
     }
     else
     {
+        if(emptyList(*t))
+        {
+            printf("\n\nLista vazia, por favor, tente novamente!\n\n");
+            return p;
+        }
         printList(*t);
     }
 
@@ -348,7 +358,7 @@ Fila
     printf("Digite o codigo da tarefa:");
     scanf("%d", &code);
 
-        if (choise == 1)
+        if (choice == 1)
         {
             Fila *aux1 = p;
             Fila *aux2 = createQueue();
@@ -395,7 +405,6 @@ Fila
         else
         {
             if(auxStatus != -1)
-
             {
                 if (searchTask(*t, code) != NULL)
                 {
@@ -413,7 +422,6 @@ Fila
                 }
 
             }
-
             else
             {
                 return p;
