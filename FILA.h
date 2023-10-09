@@ -44,7 +44,7 @@ typedef struct fila
     No *last;
 } Fila;
 
-int 
+int
 emptyQueue(Fila *f)
 {
     if (f->first == NULL)
@@ -52,7 +52,7 @@ emptyQueue(Fila *f)
     return 0;
 }
 
-Fila 
+Fila
 *createQueue()
 {
     Fila *f = (Fila *)malloc(sizeof(Fila));
@@ -60,7 +60,7 @@ Fila
     return f;
 }
 
-No 
+No
 *insertLast(No *last, task *A)
 {
     No *p = (No *)malloc(sizeof(No));
@@ -71,7 +71,7 @@ No
     return p;
 }
 
-void 
+void
 insertQueue(Fila *f, task *v)
 {
     f->last = insertLast(f->last, v);
@@ -79,7 +79,7 @@ insertQueue(Fila *f, task *v)
         f->first = f->last;
 }
 
-No 
+No
 *removeFirst(No *first)
 {
     No *p = first->next;
@@ -87,7 +87,7 @@ No
     return p;
 }
 
-task 
+task
 *removeQueue(Fila *f)
 {
     task *v;
@@ -103,7 +103,7 @@ task
     return v;
 }
 
-void 
+void
 printDate(date d)
 {
     if (d.day < 10)
@@ -119,10 +119,9 @@ printDate(date d)
     printf("/%d", d.year);
 }
 
-void 
+void
 printQueue(Fila *f)
-{   
-    system("cls");
+{
     No *q;
     printf ("\n\n=======================Fila de Tarefas=======================\n\n");
     for (q = f->first; q != NULL; q = q->next)
@@ -145,10 +144,10 @@ printQueue(Fila *f)
             printf(" Em dia");
         }
         else if(q->info->status == 1){
-            printf(" Pendente");
+            printf(" Atrasada");
         }
         else if(q->info->status == -1){
-            printf(" Atrasada");
+            printf(" Pendente");
         }
         printf("\n\n===============================================");
     }
@@ -156,7 +155,7 @@ printQueue(Fila *f)
     printf ("\n\n=========================Fim da Fila=========================\n\n");
 }
 
-Fila 
+Fila
 *freeQueue(Fila *f)
 {
     No *q = f->first;

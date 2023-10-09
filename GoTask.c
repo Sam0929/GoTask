@@ -15,7 +15,6 @@ void setStatus(task *t);
 void printMark();
 Fila *updateStatus(Fila *p, No **t);
 
-
 int main()
 
 {
@@ -64,14 +63,14 @@ int main()
             break;
 
         case 5:
-        
+
             system("cls");
             printList(tarefas_concluidas);
             printList(tarefas_pendentes);
             system("pause");
             break;
         case 6:
-            
+            system("cls");
             tarefas_criadas = updateStatus(tarefas_criadas, &tarefas_pendentes);
             system("pause");
             break;
@@ -88,7 +87,7 @@ int main()
     return 0;
 }
 
-void 
+void
 printMark ()
 {
     printf("==============================================================");
@@ -96,7 +95,7 @@ printMark ()
     printf("==============================================================\n\n");
 }
 
-date 
+date
 getdate(boolean ini)
 {
     date d;
@@ -116,11 +115,12 @@ getdate(boolean ini)
     return d;
 }
 
-void 
+void
 readTask(Fila *p)
 {
 
     task *t = (task *)malloc(sizeof(task));
+    int aux = 0;
     printMark();
     printf("Digite o codigo da tarefa:");
     scanf("%d", &(t->code));
@@ -134,9 +134,12 @@ readTask(Fila *p)
     do
     {
         t->finish = getdate(0);
-    } while (t->finish.day < 1 ||
-             t->finish.day > 31 || 
-             t->finish.month > 12 || 
+        aux = compareDates(t->finish, t->start);
+        if(aux > 0){printf("\nData invalida, por favor insira uma data correta!\nInsira a nova data:");}
+    } while (aux > 0 ||
+             t->finish.day < 1||
+             t->finish.day > 31 ||
+             t->finish.month > 12 ||
              t->finish.year > 2100);
 
     insertQueue(p, t);
@@ -160,7 +163,7 @@ No
     return (aux);
 }
 
-void 
+void
 updateTask(Fila *p)
 {
     printf("==============================================================\n\n");
@@ -236,10 +239,10 @@ updateTask(Fila *p)
     }
 }
 
-Fila 
+Fila
 *finishTask(Fila *p, No **t)
 {
-    
+
     printQueue(p);
     task *aux;
     Fila *aux1 = p;
@@ -281,13 +284,13 @@ verifyDate(date d)
     SYSTEMTIME t;
     GetLocalTime(&t);
     if (d.year < t.wYear)
-        return -1;
-    else if (d.year == t.wYear && d.month < t.wMonth)
-        return -1;
-    else if (d.year == t.wYear && d.month == t.wMonth && d.day < t.wDay)
-        return -1;
-    else if (d.year == t.wYear && d.month == t.wMonth && d.day == t.wDay)
         return 1;
+    else if (d.year == t.wYear && d.month < t.wMonth)
+        return 1;
+    else if (d.year == t.wYear && d.month == t.wMonth && d.day < t.wDay)
+        return 1;
+    else if (d.year == t.wYear && d.month == t.wMonth && d.day == t.wDay)
+        return -1;
     else
         return 0;
 }
@@ -295,41 +298,93 @@ verifyDate(date d)
 void
 setStatus(task *t)
 {
-      t->status = verifyDate(t->finish);  
+      t->status = verifyDate(t->finish);
 }
 
-Fila  
+Fila
 *updateStatus (Fila *p, No **t)
-{   
-    printQueue(p);
+{
     task *aux;
     Fila *aux1 = p;
     Fila *aux2 = createQueue();
     int flag = 0;
     int code;
     printf("==============================================================\n\n");
-    printf("Que tarefa deseja atualizar?");
-    printf("\n\n==============================================================\n\n");
+    printf("Atualizar uma tarefa da Fila de Tarefas ou da Lista de Tarefas?\n\n  1-Fila   2-Lista\n\nEscolha a opcao:");
     scanf("%d", &code);
-    while (!emptyQueue(aux1))
+    printf("\n\n==============================================================\n\n");
+
+    if (code == 1)
     {
-        aux = removeQueue(aux1);
-        if (aux->code == code)
+        int auxStatus;
+        do{
+            printf ("Que status deseja alocar para a tarefa?\n\n  0 - Em dia // 1 - Atrasada // -1 Pendente\n\nEscolha a opcao:");
+            scanf("%d", &auxStatus);
+            printf("\n\n==============================================================\n\n");
+        }
+        while(auxStatus < -1 || auxStatus > 1);
+        printQueue(p);
+        printf("==============================================================\n\n");
+        printf("Que tarefa da fila deseja atualizar?");
+        printf("\n\n==============================================================\n\n");
+        printf("Digite o codigo da tarefa:");
+        No *task;
+        task = searchTask(aux1);
+
+        if(task != NULL)
         {
-            *t = insertListByDate(*t, aux);
-            aux -> status = -1;
-            printf("\n==============================================================");
-            printf("\n\nStatus atualizado com sucesso!\n\n");
-            flag++;
+            code = task -> info -> code;
         }
         else
         {
-            insertQueue(aux2, aux);
+            auxStatus = 3;
+        }
+
+        if(auxStatus == -1)
+        {
+            while (!emptyQueue(aux1))
+            {
+                aux = removeQueue(aux1);
+                if (aux->code == code)
+                {
+                    *t = insertListByDate(*t, aux);
+                    aux -> status = auxStatus;
+                    printf("\n==============================================================");
+                    printf("\n\nStatus atualizado com sucesso!\n\n");
+                    flag++;
+                }
+                else
+                {
+                    insertQueue(aux2, aux);
+                }
+            }
+            return aux2;
+        }
+        else
+        {
+            if (task != NULL)
+            {
+                aux = task -> info;
+            }
+            else
+            {
+                aux = NULL;
+            }
+        }
+
+        if (!flag && aux == NULL)
+        {
+            printf("\n\nTarefa nao encontrada, por favor, tente novamente!\n\n");
+            return p;
+        }
+        else
+        {
+            aux -> status = auxStatus;
+            printf("\n==============================================================");
+            printf("\n\nStatus atualizado com sucesso!\n\n");
+            return p;
         }
     }
-
-    if (!flag)
-        printf("\n\nTarefa nao encontrada, por favor, tente novamente!\n\n");
-
-    return aux2;
 }
+
+

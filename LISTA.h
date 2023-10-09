@@ -17,13 +17,13 @@ no *freeList (no* lista) LIBERA A LISTA
 
 */
 
-No 
+No
 *createList()
 {
     return NULL;
 }
 
-int 
+int
 emptyList(No *lista)
 {
     if (lista == NULL)
@@ -31,7 +31,7 @@ emptyList(No *lista)
     return 0;
 }
 
-No 
+No
 *insertList(No *lista, task *x)
 {
     No *novo;
@@ -41,7 +41,7 @@ No
     return novo;
 }
 
-int 
+int
 compareDates(date d1, date d2)
 {
     if (d1.year > d2.year)
@@ -52,7 +52,7 @@ compareDates(date d1, date d2)
     {
         return 1;
     }
-    else // Os anos sÃ£o iguais, verifique os meses e dias.
+    else // Os anos são iguais, verifique os meses e dias.
     {
         if (d1.month > d2.month)
         {
@@ -62,7 +62,7 @@ compareDates(date d1, date d2)
         {
             return 1;
         }
-        else // Os meses sÃ£o iguais, verifique os dias.
+        else // Os meses são iguais, verifique os dias.
         {
             if (d1.day > d2.day)
             {
@@ -72,38 +72,37 @@ compareDates(date d1, date d2)
             {
                 return 1;
             }
-            else // As datas sÃ£o iguais.
+            else // As datas são iguais.
             {
                 return 0;
             }
         }
     }
 }
-
-No 
+No
 *insertListByDate(No *lista, task *x)
 {
     No *novo;
     novo = (No *)malloc(sizeof(No));
     novo->info = x;
-    
+
     if (lista == NULL || compareDates(lista->info->finish, novo->info->finish) < 0)
     {
         novo->next = lista;
         return novo;
     }
-    
+
     No *prev = NULL;
     No *p = lista;
-    
+
     while (p != NULL && compareDates(p->info->finish, novo->info->finish) > 0)
     {
         prev = p;
         p = p->next;
     }
-    
+
     novo->next = p;
-    
+
     if (prev != NULL)
     {
         prev->next = novo;
@@ -115,7 +114,7 @@ No
     }
 }
 
-No 
+No
 *removeInfo(No *lista, int x)
 {
     No *ant = NULL;
@@ -142,7 +141,7 @@ No
     return lista;
 }
 
-void 
+void
 printList(No *lista)
 {
 
@@ -162,10 +161,10 @@ printList(No *lista)
             printf(" Em dia");
         }
         else if(p->info->status == 1){
-            printf(" Pendente");
+            printf(" Atrasada");
         }
         else if(p->info->status == -1){
-            printf(" Atrasada");
+            printf(" Pendente");
         }
         printf("\n\n===============================================\n");
         p = p->next;
@@ -173,7 +172,7 @@ printList(No *lista)
     printf ("\n\n=========================Fim da Lista=========================\n\n");
 }
 
-No 
+No
 *freeList(No *lista)
 {
     No *p = lista;
