@@ -142,11 +142,11 @@ readTask(Fila *p)
     t->start = getdate(1);
     printf("\n\nDigite a data de termino (dd mm aaaa):");
     do
-    {
-        t->finish = getdate(0);
-        aux = compareDates(t->finish, t->start);
+    {   
         if(aux > 0){printf("\nData invalida, por favor insira uma data correta!\nInsira a nova data:");}
-    } while (aux > 0 ||
+        t->finish = getdate(0);
+        aux = 1;
+    } while (compareDates(t->finish, t->start) > 0||
              t->finish.day < 1||
              t->finish.day > 31 ||
              t->finish.month > 12 ||
@@ -363,6 +363,8 @@ Fila
             Fila *aux1 = p;
             Fila *aux2 = createQueue();
             No *task;
+            No *findCode;
+            
 
             if(auxStatus == -1)
             {
@@ -385,18 +387,18 @@ Fila
                 return aux2;
             }
             else
-            {
-                aux = searchTask(p->first, code) -> info;
+            {   
+                findCode = searchTask(p->first, code);
             }
 
-            if (!flag && aux == NULL)
+            if (!flag && findCode == NULL)
             {
                 printf("\n\nTarefa nao encontrada, por favor, tente novamente!\n\n");
                 return p;
             }
             else
             {
-                aux -> status = auxStatus;
+                findCode->info->status = auxStatus;
                 printf("\n==============================================================");
                 printf("\n\nStatus atualizado com sucesso!\n\n");
                 return p;

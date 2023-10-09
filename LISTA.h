@@ -185,21 +185,24 @@ printListByStatus(No *lista)
 {
 
     No *p = lista;
-    if (!emptyList(lista))
+    if (!emptyList(p))
     {
         printf ("\n\n=======================Lista de Tarefas em dia=======================\n\n");
-        while ((p != NULL) && (p->info->status == 0))
+        while ((!emptyList(p)))
         {
-            printf("\n===================Tarefa:%d===================\n", p->info->code);
-            printf("\nNome da tarefa: %s ", p->info->name);
-            printf("\nNome do projeto: %s ", p->info->project);
-            printf("\nData de inicio: ");
-            printDate(p->info->start);
-            printf("\nData de termino: ");
-            printDate(p->info->finish);
-            printf("\nStatus:");
-            printf(" Em dia");
-            printf("\n\n===============================================\n");
+            if(p->info->status == 0)
+            {
+                printf("\n===================Tarefa:%d===================\n", p->info->code);
+                printf("\nNome da tarefa: %s ", p->info->name);
+                printf("\nNome do projeto: %s ", p->info->project);
+                printf("\nData de inicio: ");
+                printDate(p->info->start);
+                printf("\nData de termino: ");
+                printDate(p->info->finish);
+                printf("\nStatus:");
+                printf(" Em dia");
+                printf("\n\n===============================================\n");
+            }
             p = p->next;
         }
         printf ("\n\n=========================Fim da Lista=========================\n\n");
@@ -207,18 +210,21 @@ printListByStatus(No *lista)
         p = lista;
 
         printf ("\n\n=======================Lista de Tarefas em atraso=======================\n\n");
-        while ((p != NULL) && (p->info->status == 1))
+        while (!emptyList(p))
         {
-            printf("\n===================Tarefa:%d===================\n", p->info->code);
-            printf("\nNome da tarefa: %s ", p->info->name);
-            printf("\nNome do projeto: %s ", p->info->project);
-            printf("\nData de inicio: ");
-            printDate(p->info->start);
-            printf("\nData de termino: ");
-            printDate(p->info->finish);
-            printf("\nStatus:");
-            printf(" Atrasada");
-            printf("\n\n===============================================\n");
+            if(p->info->status == 1)
+            {
+                printf("\n===================Tarefa:%d===================\n", p->info->code);
+                printf("\nNome da tarefa: %s ", p->info->name);
+                printf("\nNome do projeto: %s ", p->info->project);
+                printf("\nData de inicio: ");
+                printDate(p->info->start);
+                printf("\nData de termino: ");
+                printDate(p->info->finish);
+                printf("\nStatus:");
+                printf(" Atrasada");
+                printf("\n\n===============================================\n");
+            }
             p = p->next;
         }
         printf ("\n\n=========================Fim da Lista=========================\n\n");
