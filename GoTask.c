@@ -30,7 +30,7 @@ int main()
         printf("==============================================================");
         printf("\n\n                    Bem vindo ao GoTask!!\n\n");
         printf("==============================================================\n\n");
-        printf(" 1 - Incluir Tarefas \n\n 2 - Imprimir fila \n\n 3 - Atualizar tarefa \n\n 4 - Concluir Tarefa\n\n 5 - Atualizar Status \n\n 6 - Imprimir tarefas concluidas \n\n 7 - Imprimir tarefas pendentes \n\n 9 - Sair do sistema \n\n Escolha a opcao:");
+        printf(" 1 - Incluir Tarefas \n\n 2 - Imprimir fila \n\n 3 - Atualizar tarefa \n\n 4 - Concluir Tarefa\n\n 5 - Atualizar Status \n\n 6 - Imprimir tarefas concluidas \n\n 7 - Imprimir tarefas pendentes \n\n 8 - Imprimir tarefas concluidas (Com e sem atraso)  \n\n 9 - Sair do sistema \n\n Escolha a opcao:");
         scanf("%d", &Choose);
 
         switch (Choose)
