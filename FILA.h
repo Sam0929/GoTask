@@ -123,36 +123,46 @@ void
 printQueue(Fila *f)
 {
     No *q;
-    printf ("\n\n=======================Fila de Tarefas=======================\n\n");
-    for (q = f->first; q != NULL; q = q->next)
+    if(f->first != NULL)
     {
+        printf ("\n\n=======================Fila de Tarefas=======================\n\n");
+        for (q = f->first; q != NULL; q = q->next)
+        {
 
-        printf("\n\n===================Tarefa:%d===================\n", q->info->code);
+            printf("===================Tarefa:%d===================\n", q->info->code);
 
-        printf("\nNome da tarefa: %s ", q->info->name);
+            printf("\nNome da tarefa: %s ", q->info->name);
 
-        printf("\nNome do projeto: %s ", q->info->project);
+            printf("\nNome do projeto: %s ", q->info->project);
 
-        printf("\nData de inicio: ");
-        printDate(q->info->start);
+            printf("\nData de inicio: ");
+            printDate(q->info->start);
 
-        printf("\nData de termino: ");
-        printDate(q->info->finish);
+            printf("\nData de termino: ");
+            printDate(q->info->finish);
 
-        printf("\nStatus:");
-        if(q->info->status == 0){
-            printf(" Em dia");
+            printf("\nStatus:");
+            if(q->info->status == 0){
+                printf(" Em dia");
+            }
+            else if(q->info->status == 1){
+                printf(" Atrasada");
+            }
+            else if(q->info->status == -1){
+                printf(" Pendente");
+            }
+            printf("\n\n===============================================\n");
         }
-        else if(q->info->status == 1){
-            printf(" Atrasada");
-        }
-        else if(q->info->status == -1){
-            printf(" Pendente");
-        }
-        printf("\n\n===============================================");
+
+        printf ("\n\n=========================Fim da Fila=========================\n\n");
+    }
+    else
+    {
+        printf("\n==============================================================");
+        printf ("\n\n  FILA VAZIA!!");
+        printf("\n\n==============================================================\n\n");
     }
 
-    printf ("\n\n=========================Fim da Fila=========================\n\n");
 }
 
 Fila

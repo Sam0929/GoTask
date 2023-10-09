@@ -30,7 +30,7 @@ int main()
         printf("==============================================================");
         printf("\n\n                    Bem vindo ao GoTask!!\n\n");
         printf("==============================================================\n\n");
-        printf(" 1 - Incluir Tarefas \n\n 2 - Imprimir fila \n\n 3 - Atualizar tarefa \n\n 4 - Concluir Tarefa\n\n 5 - TESTE - IMPRIMIR LISTA \n\n 6 - Atualizar status \n\n 9 - Sair do sistema \n\n Escolha a opcao:");
+        printf(" 1 - Incluir Tarefas \n\n 2 - Imprimir fila \n\n 3 - Atualizar tarefa \n\n 4 - Concluir Tarefa\n\n 5 - Atualizar Status \n\n 6 - Imprimir tarefas concluidas \n\n 7 - Imprimir tarefas pendentes \n\n 9 - Sair do sistema \n\n Escolha a opcao:");
         scanf("%d", &Choose);
 
         switch (Choose)
@@ -39,39 +39,48 @@ int main()
 
             system("cls");
             readTask(tarefas_criadas);
-
             break;
 
         case 2:
+
             system("cls");
             printQueue(tarefas_criadas);
             system("pause");
-
             break;
 
         case 3:
 
             system("cls");
             updateTask(tarefas_criadas);
-
             break;
 
         case 4:
+
             system("cls");
             tarefas_criadas = finishTask(tarefas_criadas, &tarefas_concluidas);
-
             break;
 
         case 5:
 
             system("cls");
-            printList(tarefas_concluidas);
-            printList(tarefas_pendentes);
+            tarefas_criadas = updateStatus(tarefas_criadas, &tarefas_pendentes);
             system("pause");
             break;
         case 6:
+
             system("cls");
-            tarefas_criadas = updateStatus(tarefas_criadas, &tarefas_pendentes);
+            printList(tarefas_concluidas);
+            system("pause");
+            break;
+        case 7:
+
+            system("cls");
+            printList(tarefas_pendentes);
+            system("pause");
+            break;
+        case 8:
+            system("cls");
+            printListByStatus(tarefas_concluidas);
             system("pause");
             break;
         }
@@ -151,11 +160,9 @@ readTask(Fila *p)
 }
 
 No
-*searchTask (Fila *p)
+*searchTask (No *p, int code)
 {
-    No *aux = p->first;
-    int code;
-    scanf("%d", &code);
+    No *aux = p;
     while (aux != NULL && aux->info->code != code)
     {
         aux = aux->next;
@@ -170,7 +177,9 @@ updateTask(Fila *p)
     printf("Que tarefa deseja modificar?");
     printf("\n\n==============================================================\n\n");
     printf("Digite o codigo da tarefa:");
-    No *aux = searchTask(p);
+    int code;
+    scanf("%d", &code);
+    No *aux = searchTask(p->first, code);
 
     if (aux == NULL)
     {
@@ -305,86 +314,114 @@ Fila
 *updateStatus (Fila *p, No **t)
 {
     task *aux;
-    Fila *aux1 = p;
-    Fila *aux2 = createQueue();
     int flag = 0;
+    int choise;
     int code;
+    int auxStatus;
+
     printf("==============================================================\n\n");
     printf("Atualizar uma tarefa da Fila de Tarefas ou da Lista de Tarefas?\n\n  1-Fila   2-Lista\n\nEscolha a opcao:");
-    scanf("%d", &code);
+    scanf("%d", &choise);
     printf("\n\n==============================================================\n\n");
 
-    if (code == 1)
+    do
     {
-        int auxStatus;
-        do{
-            printf ("Que status deseja alocar para a tarefa?\n\n  0 - Em dia // 1 - Atrasada // -1 Pendente\n\nEscolha a opcao:");
-            scanf("%d", &auxStatus);
-            printf("\n\n==============================================================\n\n");
-        }
-        while(auxStatus < -1 || auxStatus > 1);
-        printQueue(p);
-        printf("==============================================================\n\n");
-        printf("Que tarefa da fila deseja atualizar?");
+        printf ("Que status deseja alocar para a tarefa?\n\n  0 - Em dia // 1 - Atrasada // -1 Pendente\n\nEscolha a opcao:");
+        scanf("%d", &auxStatus);
         printf("\n\n==============================================================\n\n");
-        printf("Digite o codigo da tarefa:");
-        No *task;
-        task = searchTask(aux1);
 
-        if(task != NULL)
-        {
-            code = task -> info -> code;
-        }
-        else
-        {
-            auxStatus = 3;
-        }
+    }while(auxStatus < -1 || auxStatus > 1);
 
-        if(auxStatus == -1)
+    system("cls");
+
+    if(choise == 1)
+    {
+        printQueue(p);
+    }
+    else
+    {
+        printList(*t);
+    }
+
+    printf("==============================================================\n\n");
+    printf("Que tarefa deseja atualizar?");
+    printf("\n\n==============================================================\n\n");
+    printf("Digite o codigo da tarefa:");
+    scanf("%d", &code);
+
+        if (choise == 1)
         {
-            while (!emptyQueue(aux1))
+            Fila *aux1 = p;
+            Fila *aux2 = createQueue();
+            No *task;
+
+            if(auxStatus == -1)
             {
-                aux = removeQueue(aux1);
-                if (aux->code == code)
+                while (!emptyQueue(aux1))
                 {
-                    *t = insertListByDate(*t, aux);
-                    aux -> status = auxStatus;
-                    printf("\n==============================================================");
-                    printf("\n\nStatus atualizado com sucesso!\n\n");
-                    flag++;
+                    aux = removeQueue(aux1);
+                    if (aux->code == code)
+                    {
+                        *t = insertListByDate(*t, aux);
+                        aux -> status = auxStatus;
+                        printf("\n==============================================================");
+                        printf("\n\nStatus atualizado com sucesso!\n\n");
+                        flag++;
+                    }
+                    else
+                    {
+                        insertQueue(aux2, aux);
+                    }
                 }
-                else
-                {
-                    insertQueue(aux2, aux);
-                }
-            }
-            return aux2;
-        }
-        else
-        {
-            if (task != NULL)
-            {
-                aux = task -> info;
+                return aux2;
             }
             else
             {
-                aux = NULL;
+                aux = searchTask(p->first, code) -> info;
             }
-        }
 
-        if (!flag && aux == NULL)
-        {
-            printf("\n\nTarefa nao encontrada, por favor, tente novamente!\n\n");
-            return p;
+            if (!flag && aux == NULL)
+            {
+                printf("\n\nTarefa nao encontrada, por favor, tente novamente!\n\n");
+                return p;
+            }
+            else
+            {
+                aux -> status = auxStatus;
+                printf("\n==============================================================");
+                printf("\n\nStatus atualizado com sucesso!\n\n");
+                return p;
+            }
         }
         else
         {
-            aux -> status = auxStatus;
-            printf("\n==============================================================");
-            printf("\n\nStatus atualizado com sucesso!\n\n");
-            return p;
+            if(auxStatus != -1)
+
+            {
+                if (searchTask(*t, code) != NULL)
+                {
+                    printf("\n==============================================================");
+                    printf("\n\nStatus atualizado com sucesso!\n\n");
+                    (*t) -> info -> status = auxStatus;
+                    insertQueue(p, (*t) -> info);
+                    (*t) = removeInfo((*t), code);
+                    return p;
+                }
+                else
+                {
+                    printf("\n\nTarefa nao encontrada, por favor, tente novamente!\n\n");
+                    return p;
+                }
+
+            }
+
+            else
+            {
+                return p;
+            }
+
+
         }
-    }
 }
 
 
