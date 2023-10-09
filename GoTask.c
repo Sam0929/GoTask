@@ -85,13 +85,14 @@ int main()
             break;
         }
     }
+    
+    tarefas_criadas = freeQueue(tarefas_criadas);
+    tarefas_concluidas = freeList(tarefas_concluidas);
+
     system("cls");
     printf("\n\n==============================================================\n\n");
     printf("\t\tObrigado por utilizar nosso sistema!! \n\n\t\t\tAte a proxima!");
     printf("\n\n==============================================================");
-
-    tarefas_criadas = freeQueue(tarefas_criadas);
-    tarefas_concluidas = freeList(tarefas_concluidas);
 
     return 0;
 }
@@ -298,8 +299,6 @@ verifyDate(date d)
         return 1;
     else if (d.year == t.wYear && d.month == t.wMonth && d.day < t.wDay)
         return 1;
-    else if (d.year == t.wYear && d.month == t.wMonth && d.day == t.wDay)
-        return -1;
     else
         return 0;
 }
