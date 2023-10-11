@@ -128,30 +128,7 @@ printQueue(Fila *f)
         printf ("\n\n=======================Fila de Tarefas=======================\n\n");
         for (q = f->first; q != NULL; q = q->next)
         {
-
-            printf("===================Tarefa:%d===================\n", q->info->code);
-
-            printf("\nNome da tarefa: %s ", q->info->name);
-
-            printf("\nNome do projeto: %s ", q->info->project);
-
-            printf("\nData de inicio: ");
-            printDate(q->info->start);
-
-            printf("\nData de termino: ");
-            printDate(q->info->finish);
-
-            printf("\nStatus:");
-            if(q->info->status == 0){
-                printf(" Em dia");
-            }
-            else if(q->info->status == 1){
-                printf(" Atrasada");
-            }
-            else if(q->info->status == -1){
-                printf(" Pendente");
-            }
-            printf("\n\n===============================================\n");
+            printData(q);
         }
 
         printf ("\n\n=========================Fim da Fila=========================\n\n");
@@ -163,6 +140,34 @@ printQueue(Fila *f)
         printf("\n\n==============================================================\n\n");
     }
 
+}
+
+void printData (No *Data)
+{
+
+    printf("===================Tarefa:%d===================\n", Data->info->code);
+
+    printf("\n Nome da tarefa: %s ", Data->info->name);
+
+    printf("\n Nome do projeto: %s ", Data->info->project);
+
+    printf("\n Data de inicio: ");
+    printDate(Data->info->start);
+
+    printf("\n Data de termino: ");
+    printDate(Data->info->finish);
+
+    printf("\n Status:");
+    if(Data->info->status == 0){
+        printf(" Em dia");
+    }
+    else if(Data->info->status == 1){
+        printf(" Atrasada");
+    }
+    else if(Data->info->status == -1){
+        printf(" Pendente");
+    }
+    printf("\n\n===============================================\n");    
 }
 
 Fila

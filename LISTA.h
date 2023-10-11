@@ -149,27 +149,9 @@ printList(No *lista)
     if (lista != NULL)
     {
         printf ("\n\n=======================Lista de Tarefas=======================\n\n");
-        while (p != NULL)
+        for (p; p != NULL; p = p->next)
         {
-            printf("\n===================Tarefa:%d===================\n", p->info->code);
-            printf("\nNome da tarefa: %s ", p->info->name);
-            printf("\nNome do projeto: %s ", p->info->project);
-            printf("\nData de inicio: ");
-            printDate(p->info->start);
-            printf("\nData de termino: ");
-            printDate(p->info->finish);
-            printf("\nStatus:");
-            if(p->info->status == 0){
-                printf(" Em dia");
-            }
-            else if(p->info->status == 1){
-                printf(" Atrasada");
-            }
-            else if(p->info->status == -1){
-                printf(" Pendente");
-            }
-            printf("\n\n===============================================\n");
-            p = p->next;
+            printData(p);
         }
         printf ("\n\n=========================Fim da Lista=========================\n\n");
     }

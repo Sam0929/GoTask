@@ -5,7 +5,6 @@
 #include <windows.h>
 #include "FILA.h"
 #include "LISTA.h"
-
 date getdate(boolean ini);
 void readTask(Fila *p);
 void updateTask(Fila *p);
@@ -39,6 +38,7 @@ int main()
 
             system("cls");
             readTask(tarefas_criadas);
+            system("pause");
             break;
 
         case 2:
@@ -52,12 +52,14 @@ int main()
 
             system("cls");
             updateTask(tarefas_criadas);
+            system("pause");
             break;
 
         case 4:
 
             system("cls");
             tarefas_criadas = finishTask(tarefas_criadas, &tarefas_concluidas);
+            system("pause");
             break;
 
         case 5:
@@ -85,7 +87,7 @@ int main()
             break;
         }
     }
-    
+
     tarefas_criadas = freeQueue(tarefas_criadas);
     tarefas_concluidas = freeList(tarefas_concluidas);
 
@@ -142,7 +144,7 @@ readTask(Fila *p)
     t->start = getdate(1);
     printf("\n\nDigite a data de termino (dd mm aaaa):");
     do
-    {   
+    {
         if(aux > 0){printf("\nData invalida, por favor insira uma data correta!\nInsira a nova data:");}
         t->finish = getdate(0);
         aux = 1;
@@ -157,7 +159,7 @@ readTask(Fila *p)
 
     printf("\n\n==============================================================");
     printf("\n\nTarefa lida com sucesso!");
-    printf("\n\n==============================================================");
+    printf("\n\n==============================================================\n\n");
 }
 
 No
@@ -245,7 +247,6 @@ updateTask(Fila *p)
         }
         printf("\n\n==============================================================");
         printf("\n\nTarefa modificada com sucesso!!");
-        sleep(2);
     }
 }
 
@@ -282,8 +283,6 @@ Fila
 
     if (!flag)
         printf("\n\nTarefa nao encontrada, por favor, tente novamente!\n\n");
-
-    sleep(2);
 
     return aux2;
 }
@@ -334,7 +333,7 @@ Fila
     system("cls");
 
     if(choice == 1)
-    {   
+    {
         if(emptyQueue(p))
         {
             printf("\n\nFila vazia, por favor, tente novamente!\n\n");
@@ -364,7 +363,7 @@ Fila
             Fila *aux2 = createQueue();
             No *task;
             No *findCode;
-            
+
 
             if(auxStatus == -1)
             {
@@ -387,7 +386,7 @@ Fila
                 return aux2;
             }
             else
-            {   
+            {
                 findCode = searchTask(p->first, code);
             }
 
