@@ -30,6 +30,7 @@ typedef struct task
     date start;
     date finish;
     int status;
+    int priority;
 } task;
 
 typedef struct nos
@@ -125,10 +126,10 @@ printQueue(Fila *f)
     No *q;
     if(f->first != NULL)
     {
-        printf ("\n\n=======================Fila de Tarefas=======================\n\n");
+        q = f->first;
+        printf ("\n\n=======================Fila de Tarefas de Prioridade %d=======================\n\n",q->info->priority);
         for (q = f->first; q != NULL; q = q->next)
         {
-
             printf("===================Tarefa:%d===================\n", q->info->code);
 
             printf("\nNome da tarefa: %s ", q->info->name);
@@ -153,13 +154,15 @@ printQueue(Fila *f)
             }
             printf("\n\n===============================================\n");
         }
-
         printf ("\n\n=========================Fim da Fila=========================\n\n");
     }
+
+                
+    
     else
     {
         printf("\n==============================================================");
-        printf ("\n\n  FILA VAZIA!!");
+        printf("\n\n Fila de Prioridade %d vazia!", q->info->priority);
         printf("\n\n==============================================================\n\n");
     }
 
