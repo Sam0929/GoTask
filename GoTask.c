@@ -9,11 +9,11 @@
 date getdate(boolean ini);
 void readTask(Fila *p1, Fila *p2, Fila *p3);
 void updateTask(Fila *p1,Fila *p2,Fila *p3);
-void finishTask(Fila *p1,Fila *p2,Fila *p3, No **t);
+Fila *finishTask(Fila *p, No **t, int code);
 int verifyDate(date d);
 void setStatus(task *t);
 void printMark();
-Fila *updateStatus(Fila *p, No **t);
+Fila *updateStatus(Fila *p, No **t, int code);
 
 int main()
 
@@ -21,10 +21,12 @@ int main()
     Fila *tarefasp1 = createQueue();
     Fila *tarefasp2 = createQueue();
     Fila *tarefasp3 = createQueue();
+    
     No *tarefas_concluidas = createList();
     No *tarefas_pendentes = createList();
 
     int Choose;
+    int code;
 
     while (Choose != 9)
     {
@@ -61,13 +63,15 @@ int main()
         case 4:
 
             system("cls");
-            finishTask(tarefasp1, tarefasp2, tarefasp3, &tarefas_concluidas);
+            code = whichCode();
+            finishTask(searchQueue(tarefasp1, tarefasp2, tarefasp3,code), &tarefas_concluidas, code);
             break;
 
         case 5:
 
             system("cls");
-            updateStatus(tarefasp1, tarefasp2, tarefasp3, &tarefas_pendentes);
+            code = whichCode();
+            updateStatus(searchQueue(tarefasp1, tarefasp2, tarefasp3,code), &tarefas_pendentes,code);
             system("pause");
             break;
         case 6:
@@ -90,7 +94,9 @@ int main()
         }
     }
     
-    tarefas_criadas = freeQueue(tarefas_criadas);
+    tarefasp1 = freeQueue(tarefasp1);
+    tarefasp1 = freeQueue(tarefasp2);
+    tarefasp1 = freeQueue(tarefasp3);
     tarefas_concluidas = freeList(tarefas_concluidas);
 
     system("cls");
@@ -250,15 +256,8 @@ Fila
 
 
 void
-updateTask(Fila *p1, Fila *p2, Fila *p3)
+updateTask(Fila *p, int code)
 {
-    printf("==============================================================\n\n");
-    printf("Que tarefa deseja modificar?");
-    printf("\n\n==============================================================\n\n");
-    printf("Digite o codigo da tarefa:");
-    int code;
-    scanf("%d", &code);
-    No *aux = searchTask(p1->first, p2->first, p3->first, code);
 
     if (aux == NULL)
     {
@@ -327,59 +326,33 @@ updateTask(Fila *p1, Fila *p2, Fila *p3)
     }
 }
 
-void
-finishTask(Fila *p1,Fila *p2,Fila *p3, No **t)
+Fila
+*finishTask(Fila *p, No **t, int code)
 {
-
-    printQueue(p1);
-    printQueue(p2);
-    printQueue(p3);
     task *aux;
-    Fila *f = createQueue();
-    //Fila *aux2 = createQueue();
-
-    int code;
-    printf("==============================================================\n\n");
-    printf("Que tarefa deseja concluir?");
-    printf("\n\n==============================================================\n\n");
-    scanf("%d", &code);
-
-    aux = searchTask(p1->first,p2->first,p3->first,code);
-
-    if(aux != NULL)
+    Fila *aux1 = p;
+    Fila *aux2 = createQueue();
+    int flag = 0;
+    while (!emptyQueue(aux1))
     {
-        f = searchQueue(p1,p2,p3,code);
-        removeInfo(f->first,code);
-        *t = insertListByDate(*t, aux);
-        printf("\n==============================================================");
-        printf("\n\nTarefa concluida com sucesso!");
+        aux = removeQueue(aux1);
+        if (aux->code == code)
+        {
+            *t = insertListByDate(*t, aux);
+            printf("\n==============================================================");
+            printf("\n\n Tarefa concluida com sucesso!\n\n");
+            flag++;
+        }
+        else
+        {
+            insertQueue(aux2, aux);
+        }
     }
-    else
-    {
-        printf("\n\nTarefa nao encontrada, por favor, tente novamente!\n\n");
 
-        sleep(2);
-    }
-    //while (!emptyQueue(aux1))
-    //{
-    //    aux = removeQueue(aux1);
-    //    if (aux->code == code)
-    //    {
-    //        *t = insertListByDate(*t, aux);
-    //        printf("\n==============================================================");
-    //        printf("\n\nTarefa concluida com sucesso!");
-    //        flag++;
-    //    }
-    //    else
-    //    {
-    //        insertQueue(aux2, aux);
-    //    }
-    //}
+    if (!flag)
+        printf("\n\n Tarefa nao encontrada, por favor, tente novamente!\n\n");
 
-    //if (!flag)
-    //    printf("\n\nTarefa nao encontrada, por favor, tente novamente!\n\n");
-
-    //sleep(2);
+    return aux2;
 }
 
 int
@@ -403,67 +376,68 @@ setStatus(task *t)
       t->status = verifyDate(t->finish);
 }
 
-void
-updateStatus (Fila *p1, Fila *p2, Fila *p3, No **t)
+Fila
+*updateStatus (Fila *p, No **t, int code)
 {
     task *aux;
+    No *findCode;
     int flag = 0;
     int choice;
-    int code;
+    int choice2;
     int auxStatus;
 
     printf("==============================================================\n\n");
-    printf("Atualizar uma tarefa da Fila de Tarefas ou da Lista de Tarefas Pendentes?\n\n  1-Fila de Tarefas   2-Lista de Tarefas Pendentes\n\nEscolha a opcao:");
+    printf(" Deseja atualizar o status automaticamente?\n\n 1-Sim   2-Nao\n\nEscolha a opcao:");
     scanf("%d", &choice);
-    printf("\n\n==============================================================\n\n");
-
-    do
-    {
-        printf ("Que status deseja alocar para a tarefa?\n\n  0 - Em dia // 1 - Atrasada // -1 Pendente\n\nEscolha a opcao:");
-        scanf("%d", &auxStatus);
-        printf("\n\n==============================================================\n\n");
-
-    }while(auxStatus < -1 || auxStatus > 1);
-
-    system("cls");
-
-    // if(choice == 1)
-    // {   
-    //     if(emptyQueue(p))
-    //     {
-    //         printf("\n\nFila vazia, por favor, tente novamente!\n\n");
-    //         return p;
-    //     }
-    //     printQueue(p1);
-    //     printQueue(p2);
-    //     printQueue(p3);
-    // }
-    // else
-    // {
-    //     if(emptyList(*t))
-    //     {
-    //         printf("\n\nLista vazia, por favor, tente novamente!\n\n");
-    //         return p;
-    //     }
-    //     printList(*t);
-    // }
+    printf("\n");
 
     printf("==============================================================\n\n");
-    printf("Que tarefa deseja atualizar?");
-    printf("\n\n==============================================================\n\n");
-    printf("Digite o codigo da tarefa:");
-    scanf("%d", &code);
-    Fila *f = searchQueue(p1,p2,p3,code);
+    printf(" Atualizar uma tarefa da Fila de Tarefas ou da Lista de Tarefas Pendentes?\n\n 1-Fila de Tarefas   2-Lista de Tarefas Pendentes\n\nEscolha a opcao:");
+    scanf("%d", &choice2);
+    printf("\n==============================================================\n\n");
 
+    system("cls");
+    
+        if(choice2 == 1)
+        {   
+            if(emptyQueue(p))
+            {
+                printf("\n==============================================================");
+                printf ("\n\n  FILA VAZIA!!");
+                printf("\n\n==============================================================\n\n");
+                return p;
+            }
+            printQueue(p);
+        }
+        else
+        {
+            if(emptyList(*t))
+            {
+                printf("\n==============================================================");
+                printf ("\n\n  LISTA VAZIA!!");
+                printf("\n\n==============================================================\n\n");
+                return p;
+            }
+            printList(*t);
+        }  
 
-    switch (choice)
+    if(choice == 2) 
+    
     {
-    case 1:
-        Fila *aux1 = f;
+        do
+        {
+            printf (" Que status deseja alocar para a tarefa?\n\n 0 - Em dia // 1 - Atrasada // -1 Pendente\n\nEscolha a opcao:");
+            scanf("%d", &auxStatus);
+            printf("\n==============================================================\n\n");
+
+        }while(auxStatus < -1 || auxStatus > 1);
+
+        system("cls");
+
+        if (choice2 == 1)
+        {
+            Fila *aux1 = p;
             Fila *aux2 = createQueue();
-            No *task;
-            No *findCode;
-            
 
             if(auxStatus == -1)
             {
@@ -475,7 +449,7 @@ updateStatus (Fila *p1, Fila *p2, Fila *p3, No **t)
                         *t = insertListByDate(*t, aux);
                         aux -> status = auxStatus;
                         printf("\n==============================================================");
-                        printf("\n\nStatus atualizado com sucesso!\n\n");
+                        printf("\n\n Status atualizado com sucesso!\n\n");
                         flag++;
                     }
                     else
@@ -492,24 +466,17 @@ updateStatus (Fila *p1, Fila *p2, Fila *p3, No **t)
 
             if (!flag && findCode == NULL)
             {
-                printf("\n\nTarefa nao encontrada, por favor, tente novamente!\n\n");
+                printf("\n\n Tarefa nao encontrada, por favor, tente novamente!\n\n");
                 return p;
             }
             else
             {
                 findCode->info->status = auxStatus;
                 printf("\n==============================================================");
-                printf("\n\nStatus atualizado com sucesso!\n\n");
+                printf("\n\n Status atualizado com sucesso!\n\n");
                 return p;
             }
-        break;
-    
-    default:
-        break;
-    }
-        if (choice == 1)
-        {
-            
+        }
         else
         {
             if(auxStatus != -1)
@@ -517,7 +484,7 @@ updateStatus (Fila *p1, Fila *p2, Fila *p3, No **t)
                 if (searchTask(*t, code) != NULL)
                 {
                     printf("\n==============================================================");
-                    printf("\n\nStatus atualizado com sucesso!\n\n");
+                    printf("\n\n Status atualizado com sucesso!\n\n");
                     (*t) -> info -> status = auxStatus;
                     insertQueue(p, (*t) -> info);
                     (*t) = removeInfo((*t), code);
@@ -525,7 +492,7 @@ updateStatus (Fila *p1, Fila *p2, Fila *p3, No **t)
                 }
                 else
                 {
-                    printf("\n\nTarefa nao encontrada, por favor, tente novamente!\n\n");
+                    printf("\n\n Tarefa nao encontrada, por favor, tente novamente!\n\n");
                     return p;
                 }
 
@@ -537,6 +504,24 @@ updateStatus (Fila *p1, Fila *p2, Fila *p3, No **t)
 
 
         }
+    }
+    else 
+    {   
+        findCode = searchTask(p->first, code);
+        if (findCode == NULL)
+        {
+            printf("\n\n Tarefa nao encontrada, por favor, tente novamente!\n\n");
+            return p;
+        }
+        else
+        {
+            setStatus (findCode->info);
+            printf(" Status atualizado com sucesso!\n\n");
+        }
+        
+      
+        return p;
+    }
 }
 
 
