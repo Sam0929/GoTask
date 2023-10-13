@@ -125,23 +125,24 @@ printQueue(Fila *f)
     No *q;
     if(f->first != NULL)
     {
-        printf ("\n\n=======================Fila de Tarefas=======================\n\n");
+        printf ("\n\n=======================Fila de Tarefas=======================");
         for (q = f->first; q != NULL; q = q->next)
         {
+            printf("\n\n===============================================\n");
 
-            printf("===================Tarefa:%d===================\n", q->info->code);
+            printf("\n Codigo da tarefa: %d ", q->info->code);
 
-            printf("\nNome da tarefa: %s ", q->info->name);
+            printf("\n Nome da tarefa: %s ", q->info->name);
 
-            printf("\nNome do projeto: %s ", q->info->project);
+            printf("\n Nome do projeto: %s ", q->info->project);
 
-            printf("\nData de inicio: ");
+            printf("\n Data de inicio: ");
             printDate(q->info->start);
 
-            printf("\nData de termino: ");
+            printf("\n Data de termino: ");
             printDate(q->info->finish);
 
-            printf("\nStatus:");
+            printf("\n Status:");
             if(q->info->status == 0){
                 printf(" Em dia");
             }
@@ -151,7 +152,7 @@ printQueue(Fila *f)
             else if(q->info->status == -1){
                 printf(" Pendente");
             }
-            printf("\n\n===============================================\n");
+            printf("\n\n===============================================");
         }
 
         printf ("\n\n=========================Fim da Fila=========================\n\n");
