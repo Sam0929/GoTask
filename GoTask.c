@@ -473,3 +473,33 @@ int whichTask()
     
     return code;
 }
+
+Fila*
+removeTask(Fila *p, int code, No **t)
+{   
+    Fila *aux1 = p;
+    Fila *aux2 = createQueue();
+    task *aux;
+    int flag = 0;
+
+    while (!emptyQueue(aux1))
+    {
+        aux = removeQueue(aux1);
+        if (aux->code == code)
+        {
+            *t = insertListByDate(*t, aux);
+            printf("\n==============================================================");
+            printf("\n\n Tarefa concluida com sucesso!\n\n");
+            flag++;
+        }
+        else
+        {
+            insertQueue(aux2, aux);
+        }
+    }
+
+    if (!flag)
+        printf("\n\n Tarefa nao encontrada, por favor, tente novamente!\n\n");
+
+    return aux2;
+}
