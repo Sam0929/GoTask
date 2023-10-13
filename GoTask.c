@@ -16,6 +16,7 @@ int verifyDate(date d);
 void setStatus(task *t);
 Fila *updateStatus(Fila *p, No **t, int code);
 int whichTask();
+Fila* removeTask(Fila *p, int code, No **t);
 
 int main()
 
