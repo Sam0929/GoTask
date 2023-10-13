@@ -489,8 +489,6 @@ removeTask(Fila *p, int code, No **t)
         if (aux->code == code)
         {
             *t = insertListByDate(*t, aux);
-            printf("\n==============================================================");
-            printf("\n\n Tarefa concluida com sucesso!\n\n");
             flag++;
         }
         else
