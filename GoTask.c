@@ -8,7 +8,7 @@
 
 date getdate(boolean ini);
 void readTask(Fila *p1, Fila *p2, Fila *p3);
-void updateTask(Fila *p1,Fila *p2,Fila *p3);
+void updateTask(No *p, int code);
 Fila *finishTask(Fila *p, No **t, int code);
 int verifyDate(date d);
 void setStatus(task *t);
@@ -188,28 +188,13 @@ readTask(Fila *p1, Fila *p2, Fila *p3)
 }
 
 No
-*searchTask (No *p1, No *p2, No *p3, int code)
+*searchTask (No *p, int code)
 {
-    No *aux = p1;
-
-    while(aux->info->code != code)
+    No *aux = p;
+    while (aux != NULL && aux->info->code != code)
     {
-        while (aux != NULL)
-        {
-            aux = aux->next;
-        }
-        aux = p2;
-        while (aux != NULL)
-        {
-            aux = aux->next;
-        }
-        aux = p3;
-        while (aux != NULL)
-        {
-            aux = aux->next;
-        }
+        aux = aux->next;
     }
-    
     return (aux);
 }
 
