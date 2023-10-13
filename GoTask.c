@@ -207,6 +207,17 @@ No
     return (aux);
 }
 
+int whichTask()
+{
+    int code;
+    printf("==============================================================\n\n");
+    printf(" Digite o codigo da tarefa:");
+    scanf("%d", &code);
+    printf("\n==============================================================\n\n");
+    
+    return code;
+}
+
 Fila
 *searchQueue (Fila *f1, Fila *f2, Fila *f3, int code)
 {
