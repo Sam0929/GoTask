@@ -10,11 +10,12 @@ date getdate(boolean ini);
 void printMark();
 void readTask(Fila *p);
 No *searchTask(No *p, int code);
-void updateTask(Fila *p);                        //update task verificar data
-Fila *finishTask(Fila *p, No **t);          
+void updateTask(Fila *p, int code);                        //update task verificar data
+Fila *finishTask(Fila *p, No **t, int code);          
 int verifyDate(date d);
 void setStatus(task *t);
-Fila *updateStatus(Fila *p, No **t);
+Fila *updateStatus(Fila *p, No **t, int code);
+int whichTask();
 
 int main()
 
@@ -22,7 +23,7 @@ int main()
     Fila *tarefas_criadas = createQueue();
     No *tarefas_concluidas = createList();
     No *tarefas_pendentes = createList();
-
+    int code;
     int Choose;
 
     while (Choose != 9)
@@ -53,21 +54,25 @@ int main()
         case 3:
 
             system("cls");
-            updateTask(tarefas_criadas);
+            code = whichTask();
+            updateTask(tarefas_criadas, code);
             system("pause");
             break;
 
         case 4:
 
             system("cls");
-            tarefas_criadas = finishTask(tarefas_criadas, &tarefas_concluidas);
+            code = whichTask();
+            system("cls");
+            tarefas_criadas = finishTask(tarefas_criadas, &tarefas_concluidas, code);
             system("pause");
             break;
 
         case 5:
 
             system("cls");
-            tarefas_criadas = updateStatus(tarefas_criadas, &tarefas_pendentes);
+            code = whichTask();
+            tarefas_criadas = updateStatus(tarefas_criadas, &tarefas_pendentes, code);
             system("pause");
             break;
         case 6:
@@ -176,17 +181,9 @@ No
 }
 
 void
-updateTask(Fila *p)
+updateTask(Fila *p, int code)
 { 
-    int code;
     int aux2=0;
-    
-    printf("==============================================================\n\n");
-    printf(" Que tarefa deseja modificar?");
-    printf("\n\n==============================================================\n\n");
-    printf(" Digite o codigo da tarefa:");
-   
-    scanf("%d", &code);
     No *aux = searchTask(p->first, code);
 
     if (aux == NULL)
@@ -268,20 +265,12 @@ updateTask(Fila *p)
 }
 
 Fila
-*finishTask(Fila *p, No **t)
+*finishTask(Fila *p, No **t, int code)
 {
-
-    printQueue(p);
     task *aux;
     Fila *aux1 = p;
     Fila *aux2 = createQueue();
     int flag = 0;
-
-    int code;
-    printf("==============================================================\n\n");
-    printf(" Que tarefa deseja concluir?");
-    printf("\n\n==============================================================\n\n");
-    scanf("%d", &code);
     while (!emptyQueue(aux1))
     {
         aux = removeQueue(aux1);
@@ -289,7 +278,7 @@ Fila
         {
             *t = insertListByDate(*t, aux);
             printf("\n==============================================================");
-            printf("\n\n Tarefa concluida com sucesso!");
+            printf("\n\n Tarefa concluida com sucesso!\n\n");
             flag++;
         }
         else
@@ -326,14 +315,13 @@ setStatus(task *t)
 }
 
 Fila
-*updateStatus (Fila *p, No **t)
+*updateStatus (Fila *p, No **t, int code)
 {
     task *aux;
     No *findCode;
     int flag = 0;
     int choice;
     int choice2;
-    int code;
     int auxStatus;
 
     printf("==============================================================\n\n");
@@ -369,14 +357,7 @@ Fila
                 return p;
             }
             printList(*t);
-        }
-
-    printf("==============================================================\n\n");
-    printf(" Que tarefa deseja atualizar?\n\n");    
-    printf(" Digite o codigo da tarefa:");
-    scanf("%d", &code);
-    printf("\n==============================================================\n\n");
-    
+        }  
 
     if(choice == 2) 
     
@@ -482,3 +463,13 @@ Fila
 }
 
 
+int whichTask()
+{
+    int code;
+    printf("==============================================================\n\n");
+    printf(" Digite o codigo da tarefa:");
+    scanf("%d", &code);
+    printf("\n==============================================================\n\n");
+    
+    return code;
+}
