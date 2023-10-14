@@ -50,8 +50,11 @@ int main()
         case 2:
 
             system("cls");
+            printf ("\n\n=======================Fila de Tarefas de Prioridade Alta =======================\n\n");
             printQueue(tarefasp1);
+            printf ("\n\n=======================Fila de Tarefas de Prioridade Normal =======================\n\n");
             printQueue(tarefasp2);
+            printf ("\n\n=======================Fila de Tarefas de Prioridade Baixa =======================\n\n");
             printQueue(tarefasp3);
             system("pause");
             break;

@@ -123,12 +123,24 @@ printDate(date d)
 void
 printQueue(Fila *f)
 {
+<<<<<<< HEAD
     No *q = f->first;
     
     if(q != NULL)
+=======
+    No *q;
+    q = f->first;
+
+    if(f->first == NULL)
     {
-        
-        printf ("\n\n=======================Fila de Tarefas de Prioridade %d=======================\n\n",q->info->priority);
+
+        printf("\n==============================================================");
+        printf("\n\n Fila vazia!");
+        printf("\n\n==============================================================\n\n");
+    }
+    else
+>>>>>>> 273a05c56959039715847892f7fc19ac27ebb633
+    {
         for (q = f->first; q != NULL; q = q->next)
         {
             printf("===================Tarefa:%d===================\n", q->info->code);
@@ -157,12 +169,15 @@ printQueue(Fila *f)
         }
         printf ("\n\n=========================Fim da Fila=========================\n\n");
     }
+<<<<<<< HEAD
     else
     {
         printf("\n==============================================================");
         printf("\n\n Fila Vazia!");
         printf("\n\n==============================================================\n\n");
     }
+=======
+>>>>>>> 273a05c56959039715847892f7fc19ac27ebb633
 
 }
 
