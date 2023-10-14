@@ -6,9 +6,11 @@
 #include "FILA.h"
 #include "LISTA.h"
 
+int whichCode();
+Fila *searchQueue(Fila *f1, Fila *f2, Fila *f3, int code);
 date getdate(boolean ini);
 void readTask(Fila *p1, Fila *p2, Fila *p3);
-void updateTask(No *p, int code);
+void updateTask(Fila *p, int code);
 Fila *finishTask(Fila *p, No **t, int code);
 int verifyDate(date d);
 void setStatus(task *t);
@@ -57,7 +59,8 @@ int main()
         case 3:
 
             system("cls");
-            updateTask(tarefasp1, tarefasp2, tarefasp3);
+            code = whichCode();
+            updateTask(searchQueue(tarefasp1, tarefasp2, tarefasp3,code),code);
             break;
 
         case 4:
@@ -198,7 +201,7 @@ No
     return (aux);
 }
 
-int whichTask()
+int whichCode()
 {
     int code;
     printf("==============================================================\n\n");
@@ -243,6 +246,9 @@ Fila
 void
 updateTask(Fila *p, int code)
 {
+
+    int aux2=0;
+    No *aux = searchTask(p->first, code);
 
     if (aux == NULL)
     {
@@ -294,9 +300,19 @@ updateTask(Fila *p, int code)
 
         case 5:
 
-            printf("\n\nDigite a nova data de termino da tarefa:");
-            aux1->finish = getdate(0);
+            printf("\n==============================================================");
+            printf("\n\n Digite a nova data de termino da tarefa:");
 
+                do
+                {
+                    if(aux2 > 0){printf("\n Data invalida, por favor insira uma data correta!\n\nInsira a nova data:");}
+                    aux1->finish = getdate(0);
+                    aux2 = 1;
+                } while (compareDates(aux1->finish, aux1->start) > 0 ||
+                        aux1->finish.day < 1 ||
+                        aux1->finish.day > 31 ||
+                        aux1->finish.month > 12 ||
+                        aux1->finish.year > 2100);
             break;
 
         case 6:

@@ -124,9 +124,11 @@ void
 printQueue(Fila *f)
 {
     No *q;
+    q = f->first;
+
     if(f->first != NULL)
     {
-        q = f->first;
+        
         printf ("\n\n=======================Fila de Tarefas de Prioridade %d=======================\n\n",q->info->priority);
         for (q = f->first; q != NULL; q = q->next)
         {
