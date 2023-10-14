@@ -6,26 +6,29 @@
 #include "FILA.h"
 #include "LISTA.h"
 
+int whichCode();
+Fila *searchQueue(Fila *f1, Fila *f2, Fila *f3, int code);
 date getdate(boolean ini);
-void printMark();
-void readTask(Fila *p);
-No *searchTask(No *p, int code);
-void updateTask(Fila *p, int code);                        //update task verificar data
-Fila *finishTask(Fila *p, No **t, int code);          
+void readTask(Fila *p1, Fila *p2, Fila *p3);
+void updateTask(Fila *p, int code);
+Fila *finishTask(Fila *p, No **t, int code);
 int verifyDate(date d);
 void setStatus(task *t);
+void printMark();
 Fila *updateStatus(Fila *p, No **t, int code);
-int whichTask();
-Fila* removeTask(Fila *p, int code, No **t);
 
 int main()
 
 {
-    Fila *tarefas_criadas = createQueue();
+    Fila *tarefasp1 = createQueue();
+    Fila *tarefasp2 = createQueue();
+    Fila *tarefasp3 = createQueue();
+    
     No *tarefas_concluidas = createList();
     No *tarefas_pendentes = createList();
     int code;
     int Choose;
+    int code;
 
     while (Choose != 9)
     {
@@ -41,39 +44,47 @@ int main()
         case 1:
 
             system("cls");
-            readTask(tarefas_criadas);
-            system("pause");
+            readTask(tarefasp1,tarefasp2,tarefasp3);
             break;
 
         case 2:
 
             system("cls");
-            printQueue(tarefas_criadas);
+            printf ("\n\n=======================Fila de Tarefas de Prioridade Alta =======================\n\n");
+            printQueue(tarefasp1);
+            printf ("\n\n=======================Fila de Tarefas de Prioridade Normal =======================\n\n");
+            printQueue(tarefasp2);
+            printf ("\n\n=======================Fila de Tarefas de Prioridade Baixa =======================\n\n");
+            printQueue(tarefasp3);
             system("pause");
             break;
 
         case 3:
 
             system("cls");
-            code = whichTask();
-            updateTask(tarefas_criadas, code);
-            system("pause");
+            code = whichCode();
+            updateTask(searchQueue(tarefasp1, tarefasp2, tarefasp3,code),code);
             break;
 
         case 4:
 
             system("cls");
-            code = whichTask();
-            system("cls");
-            tarefas_criadas = finishTask(tarefas_criadas, &tarefas_concluidas, code);
-            system("pause");
+            code = whichCode();
+            finishTask(searchQueue(tarefasp1, tarefasp2, tarefasp3,code), &tarefas_concluidas, code);
             break;
 
         case 5:
 
             system("cls");
-            code = whichTask();
-            tarefas_criadas = updateStatus(tarefas_criadas, &tarefas_pendentes, code);
+            code = whichCode();
+            if(searchQueue(tarefasp1, tarefasp2, tarefasp3, code) != NULL)
+            {
+                updateStatus(searchQueue(tarefasp1, tarefasp2, tarefasp3,code), &tarefas_pendentes,code);
+            }
+            else
+            {
+                printf (" Tarefa nao encontrada, por favor, tente novamente!\n\n");
+            }
             system("pause");
             break;
         case 6:
@@ -96,7 +107,9 @@ int main()
         }
     }
     
-    tarefas_criadas = freeQueue(tarefas_criadas);
+    tarefasp1 = freeQueue(tarefasp1);
+    tarefasp1 = freeQueue(tarefasp2);
+    tarefasp1 = freeQueue(tarefasp3);
     tarefas_concluidas = freeList(tarefas_concluidas);
 
     system("cls");
@@ -136,14 +149,23 @@ getdate(boolean ini)
 }
 
 void
-readTask(Fila *p)
+readTask(Fila *p1, Fila *p2, Fila *p3)
 {
 
     task *t = (task *)malloc(sizeof(task));
     int aux = 0;
     printMark();
-    printf(" Digite o codigo da tarefa:");
-    scanf("%d", &(t->code));
+    printf("Digite o codigo da tarefa:");
+
+    do
+    {   
+        if(aux > 0){printf("\nCodigo ja existente, por favor insira um novo codigo!\nInsira o novo codigo:");}
+        scanf(" %d", &(t->code));
+        aux ++;
+        
+    } while (searchQueue(p1, p2, p3, t->code) != NULL);
+
+    aux = 0;
     fflush(stdin);
     printf("\n\n Digite o nome da tarefa:");
     scanf(" %[^\n]", (t->name));
@@ -155,14 +177,31 @@ readTask(Fila *p)
     {   
         if(aux > 0){printf("\n Data invalida, por favor insira uma data correta!\n\nInsira a nova data:");}
         t->finish = getdate(0);
-        aux = 1;
+        aux ++;
     } while (compareDates(t->finish, t->start) > 0||
              t->finish.day < 1||
              t->finish.day > 31 ||
              t->finish.month > 12 ||
              t->finish.year > 2100);
+    
+    printf("\nQual nivel de prioridade (1 - Alta | 2 - Normal | 3 - Baixa):");
+    scanf(" %d",&t->priority);
+    switch (t->priority)
+    {
+        case 1:
+            insertQueue(p1, t);
+            break;
+        case 2:
+            insertQueue(p2, t);
+            break;
+        case 3:
+            insertQueue(p3, t);
+            break;
+    
+        default:
+            printf("Prioridade invalida!");
+    }
 
-    insertQueue(p, t);
     setStatus(t);
 
     printf("\n==============================================================");
@@ -181,19 +220,54 @@ No
     return (aux);
 }
 
-void
-updateTask(Fila *p, int code)
-{ 
-    int aux2=0;
-    No *aux = searchTask(p->first, code);
+int whichCode()
+{
+    int code;
+    printf("==============================================================\n\n");
+    printf(" Digite o codigo da tarefa:");
+    scanf("%d", &code);
+    printf("\n==============================================================\n\n");
+    
+    return code;
+}
 
-    if (aux == NULL)
+Fila *searchQueue(Fila *f1, Fila *f2, Fila *f3, int code)
+{
+    Fila *filas[] = {f1, f2, f3};
+
+    for (int i = 0; i < 3; i++) 
     {
-        printf("\n Impossivel localizar a tarefa, por favor, tente novamente!\n\n");
+        No *aux = filas[i]->first;
+        
+        while (aux != NULL) 
+        {
+            if (aux->info->code == code) 
+            {
+                return filas[i];
+            }
+            aux = aux->next;
+        }
     }
 
+    return NULL;
+}
+
+void
+updateTask(Fila *p, int code)
+{
+
+    int aux2=0;
+    No *aux;
+    if (p != NULL)
+    {
+        aux = searchTask(p->first, code);
+    }
     else
     {
+        printf("\n Impossivel localizar a tarefa, por favor, tente novamente!\n\n");
+        system("pause");
+        return;
+    }
         system("cls");
 
         task *aux1 = aux->info;
@@ -241,17 +315,17 @@ updateTask(Fila *p, int code)
             printf("\n==============================================================");
             printf("\n\n Digite a nova data de termino da tarefa:");
                 
-                do
-                {   
-                    if(aux2 > 0){printf("\n Data invalida, por favor insira uma data correta!\n\nInsira a nova data:");}
-                    aux1->finish = getdate(0);
-                    aux2 = 1;
-                } while (compareDates(aux1->finish, aux1->start) > 0||
-                        aux1->finish.day < 1||
-                        aux1->finish.day > 31 ||
-                        aux1->finish.month > 12 ||
-                        aux1->finish.year > 2100);
-
+            do
+            {
+                if(aux2 > 0){printf("\n Data invalida, por favor insira uma data correta!\n\nInsira a nova data:");}
+                aux1->finish = getdate(0);
+                aux2 = 1;
+            } while (compareDates(aux1->finish, aux1->start) > 0 ||
+                    aux1->finish.day < 1 ||
+                    aux1->finish.day > 31 ||
+                    aux1->finish.month > 12 ||
+                    aux1->finish.year > 2100);
+                    
             break;
 
         case 6:
@@ -262,7 +336,6 @@ updateTask(Fila *p, int code)
         }
         printf("\n==============================================================");
         printf("\n\nTarefa modificada com sucesso!!\n\n");
-    }
 }
 
 Fila
