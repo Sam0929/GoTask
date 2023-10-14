@@ -28,7 +28,6 @@ int main()
     No *tarefas_pendentes = createList();
     int code;
     int Choose;
-    int code;
 
     while (Choose != 9)
     {
@@ -155,7 +154,7 @@ readTask(Fila *p1, Fila *p2, Fila *p3)
     task *t = (task *)malloc(sizeof(task));
     int aux = 0;
     printMark();
-    printf("Digite o codigo da tarefa:");
+    printf(" Digite o codigo da tarefa:");
 
     do
     {   
@@ -184,7 +183,7 @@ readTask(Fila *p1, Fila *p2, Fila *p3)
              t->finish.month > 12 ||
              t->finish.year > 2100);
     
-    printf("\nQual nivel de prioridade (1 - Alta | 2 - Normal | 3 - Baixa):");
+    printf("\n Qual nivel de prioridade (1 - Alta | 2 - Normal | 3 - Baixa):");
     scanf(" %d",&t->priority);
     switch (t->priority)
     {
