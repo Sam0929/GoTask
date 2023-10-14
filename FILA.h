@@ -14,7 +14,15 @@ int removeQueue (Fila* f) REMOVE - O
 Fila* freeQueue (Fila* f) LIBERA A FILA
 
 void printQueue (Fila* f)IMPRIME A FILA
+
+No *insertLast(No *last, int v) INSERE NO FINAL
+
+No *removeFirst(No *first) REMOVE DO INICIO
+
+void printDate(date d) IMPRIME A DATA
+
 */
+
 typedef struct date
 {
     int day;

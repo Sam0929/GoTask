@@ -15,6 +15,12 @@ void printList (no* lista)IMPRIME A LISTA
 
 no *freeList (no* lista) LIBERA A LISTA
 
+int compareDates(date d1, date d2) COMPARA AS DATAS
+
+no *insertListByDate(no *lista, task *x) INSERE ORDENADO POR DATA
+
+void printlistByStatus(no *lista) IMPRIME A LISTA POR STATUS
+
 */
 
 No

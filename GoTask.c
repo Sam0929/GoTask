@@ -6,16 +6,16 @@
 #include "FILA.h"
 #include "LISTA.h"
 
-int whichCode();
-Fila *searchQueue(Fila *f1, Fila *f2, Fila *f3, int code);
-date getdate(boolean ini);
-void readTask(Fila *p1, Fila *p2, Fila *p3);
-void updateTask(Fila *p, int code);
-Fila *finishTask(Fila *p, No **t, int code);
-int verifyDate(date d);
-void setStatus(task *t);
-void printMark();
-Fila *updateStatus(Fila *p, No **t, int code);
+int whichCode(); //Função que solicita ao usuário um código de tarefa e retorna o código inserido.
+Fila *searchQueue(Fila *f1, Fila *f2, Fila *f3, int code); //Função que busca uma tarefa em uma fila de tarefas e retorna a fila em que a tarefa se encontra.
+date getdate(boolean ini);  //Função que retorna a data atual do sistema ou scaneia a data se ini for 1.
+void readTask(Fila *p1, Fila *p2, Fila *p3);  //Função que lê uma tarefa e a insere em uma fila de tarefas.
+void updateTask(Fila *p, int code);  //Função que atualiza uma tarefa em uma fila de tarefas.
+Fila *finishTask(Fila *p, No **t, int code);  //Função que remove uma tarefa de uma fila de tarefas e a insere em uma lista de tarefas concluídas.
+int verifyDate(date d);  //Função que verifica se uma data é anterior à data atual do sistema.
+void setStatus(task *t);  //Função que altera o status de uma tarefa, verificando a data do sistema.
+void printMark();  //Função que imprime a marca do sistema.
+Fila *updateStatus(Fila *p, No **t, int code);  //Função que atualiza o status de uma tarefa.
 
 int main()
 
